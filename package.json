@@ -1,0 +1,43 @@
+{
+  "name": "s7log_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.js",
+  "scripts": {
+    "build": "NODE_ENV=production babel src --out-dir dist",
+    "start": "npm run build && node dist/server.js",
+    "dev": "nodemon --exec babel-node src/server.js",
+    "test": "echo \"No test specified\" && exit 0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/node": "^7.6.3",
+    "@babel/preset-env": "^7.6.3",
+    "eslint": "^6.6.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "nodemon": "^1.19.4"
+  },
+  "dependencies": {
+    "apollo-server": "^2.9.7",
+    "apollo-server-express": "^2.9.7",
+    "bcryptjs": "^2.4.3",
+    "browserslist": "^4.7.2",
+    "caniuse-lite": "^1.0.30001005",
+    "cors": "^2.8.5",
+    "dotenv": "^6.2.0",
+    "express": "^4.17.1",
+    "graphql": "^14.5.8",
+    "jsonwebtoken": "^8.5.1",
+    "md5": "^2.2.1",
+    "mongoose": "^5.7.7",
+    "nodemon": "^1.19.4"
+  }
+}
