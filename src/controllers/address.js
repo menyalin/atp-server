@@ -18,6 +18,8 @@ export const createAddress = async (_, {
   return newAddress
 }
 
-export const allAddresses = async (_, args, context) => {
-  return null
+export const allAddresses = async (_, args, { models: { Address }
+ }) => {
+  const allAddresses = await Address.find()
+  return allAddresses
 }
