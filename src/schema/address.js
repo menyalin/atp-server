@@ -23,6 +23,7 @@ extend type Mutation {
   }
 extend type Query {
   allAddresses: [Address]
+  filteredAddresses (filter: String): [Address]
 }
 
 `

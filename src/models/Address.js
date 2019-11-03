@@ -1,11 +1,21 @@
 import mongoose from 'mongoose'
 
 const addressSchema = new mongoose.Schema({
-  name: String,
-  partner: String,
-  address: String,
-  shortName: String,
-  note: String,
+  partner: {
+    type: String
+  },
+
+  address: {
+    type: String,
+    text: true
+  },
+  shortName: {
+    type: String
+
+  },
+  note: {
+    type: String
+  },
   isShipmentPlace: Boolean,
   isDeliveryPlace: Boolean,
   created: {

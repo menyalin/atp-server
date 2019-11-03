@@ -1,9 +1,10 @@
 
-import { allAddresses, createAddress } from '../controllers/address'
+import { allAddresses, createAddress, filteredAddresses } from '../controllers/address'
 
 export default {
   Query: {
-    allAddresses
+    allAddresses,
+    filteredAddresses
   },
   Mutation: {
     createAddress
