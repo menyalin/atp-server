@@ -2,15 +2,16 @@ import { gql } from 'apollo-server-express'
 
 export default gql`
 type Address {
-  _id: ID
+  id: ID
   partner: String 
   address: String 
   shortName: String
   note: String
-  isShipmentPlace: Boolean
+  isShippingPlace: Boolean
   isDeliveryPlace: Boolean
   isActive: Boolean
-  created: String
+  createdAt: String
+  updatedAt: String
 }
 
 extend type Mutation {
@@ -18,12 +19,13 @@ extend type Mutation {
                   address:String, 
                   shortName:String,
                   note: String,
-                  isShipmentPlace: Boolean,
+                  isShippingPlace: Boolean,
                   isDeliveryPlace: Boolean ): Address
   }
 extend type Query {
   allAddresses: [Address]
-  filteredAddresses (filter: String): [Address]
+  addressById(id: String): Address
+  filteredAddresses (filter: String, type: String, id: ID): [Address]
 }
 
 `

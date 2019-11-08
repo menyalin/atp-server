@@ -2,7 +2,7 @@ import User from './User'
 import Phone from './Phone'
 import Company from './Company'
 import Contract from './Contract'
-import Address from './Address'
+import { Address } from './Adress'
 import Order from './Order'
 
 export default {

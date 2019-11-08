@@ -1,5 +1,6 @@
 import 'dotenv/config'
 import './db'
+import './pgDB'
 import cors from 'cors'
 import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
@@ -20,5 +21,5 @@ const server = new ApolloServer({
 server.applyMiddleware({ app, path: '/graphql' })
 app.listen({ port }, () => {
   // eslint-disable-next-line no-console
-  console.log(`Apollo Server on http://localhost:${port}/graphql`)
+  console.log(`Apollo Server on http://localhost:${ port }/graphql`)
 })
