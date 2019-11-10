@@ -14,6 +14,12 @@ type Address {
   updatedAt: String
 }
 
+type AddressPage {
+  addresses: [Address]
+  totalCount: Int
+}
+
+
 extend type Mutation {
    createAddress (partner: String, 
                   address:String, 
@@ -24,6 +30,7 @@ extend type Mutation {
   }
 extend type Query {
   allAddresses: [Address]
+  addressPages(offset: Int, limit: Int): AddressPage
   addressById(id: String): Address
   filteredAddresses (filter: String, type: String, id: ID): [Address]
 }

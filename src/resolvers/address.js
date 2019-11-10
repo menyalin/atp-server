@@ -1,14 +1,15 @@
 
 import {
   allAddresses, createAddress, filteredAddresses,
-  addressById
+  addressById, addressPages
 } from '../controllers/address'
 
 export default {
   Query: {
     allAddresses,
     filteredAddresses,
-    addressById
+    addressById,
+    addressPages
   },
   Mutation: {
     createAddress

@@ -56,3 +56,14 @@ export const filteredAddresses = async (_, { filter, type }, { models: { Address
   })
   return result
 }
+
+export const addressPages = async (_, { offset, limit }, { models: { Address } }) => {
+  const res = await Address.findAndCountAll({
+    offset,
+    limit
+  })
+  return {
+    addresses: res.rows,
+    totalCount: res.count
+  }
+}
