@@ -23,9 +23,7 @@ export const allAddresses = async (_, args, { models: { Address } }) => {
 
 export const addressById = async (_, { id }, { models: { Address } }) => {
   const address = await Address.findOne({
-    where: {
-      id
-    }
+    where: { id }
   })
   return address
 }

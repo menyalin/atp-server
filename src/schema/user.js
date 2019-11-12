@@ -12,13 +12,10 @@ type Phone {
     deleted: String
 }  
 type User {
-    _id: ID
+    id: ID
     email: String!
     name: String!
     password: String!
-    avatar: String
-    joinDate: String
-    roles: [String]
  }
   type Token {
     token: String!
