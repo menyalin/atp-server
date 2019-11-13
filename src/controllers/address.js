@@ -22,9 +22,7 @@ export const allAddresses = async (_, args, { models: { Address } }) => {
 }
 
 export const addressById = async (_, { id }, { models: { Address } }) => {
-  const address = await Address.findOne({
-    where: { id }
-  })
+  const address = await Address.findByPk(id)
   return address
 }
 
@@ -64,4 +62,11 @@ export const addressPages = async (_, { offset, limit }, { models: { Address } }
     addresses: res.rows,
     totalCount: res.count
   }
+}
+
+export const updateAddress = async (_, { id, address, partner, shortName, note, isShippingPlace, isDeliveryPlace }, { models: { Address } }) => {
+  const adr = await Address.findByPk(id)
+  await adr.update({ address, partner, shortName, note, isShippingPlace, isDeliveryPlace })
+  console.log(adr);
+  return adr
 }

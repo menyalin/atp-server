@@ -27,12 +27,19 @@ extend type Mutation {
                   note: String,
                   isShippingPlace: Boolean,
                   isDeliveryPlace: Boolean ): Address
+  updateAddress (id: ID, 
+                  partner: String, 
+                  address:String, 
+                  shortName:String,
+                  note: String,
+                  isShippingPlace: Boolean,
+                  isDeliveryPlace: Boolean ): Address
   }
 extend type Query {
   allAddresses: [Address]
   addressPages(offset: Int, limit: Int): AddressPage
-  addressById(id: String): Address
-  filteredAddresses (filter: String, type: String, id: ID): [Address]
+  addressById(id: ID): Address
+  filteredAddresses (filter: String, type: String): [Address]
 }
 
 `
