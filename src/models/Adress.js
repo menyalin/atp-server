@@ -2,6 +2,12 @@ import Sequelize, { Model } from 'sequelize'
 import { sequelize } from '../pgDB'
 export class Address extends Model { }
 Address.init({
+    id: {
+        type: Sequelize.UUID,
+        primaryKey: true,
+        defaultValue: Sequelize.UUIDV4,
+        unique: true
+    },
     shortName: {
         type: Sequelize.STRING,
     },

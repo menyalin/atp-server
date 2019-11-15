@@ -1,7 +1,7 @@
 
 import {
   allAddresses, createAddress, filteredAddresses,
-  addressById, addressPages, updateAddress
+  addressById, addressPages, updateAddress, blockAddress
 } from '../controllers/address'
 
 export default {
@@ -13,6 +13,7 @@ export default {
   },
   Mutation: {
     createAddress,
-    updateAddress
+    updateAddress,
+    blockAddress
   }
 }

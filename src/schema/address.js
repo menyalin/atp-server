@@ -34,10 +34,11 @@ extend type Mutation {
                   note: String,
                   isShippingPlace: Boolean,
                   isDeliveryPlace: Boolean ): Address
+  blockAddress (id: ID): Boolean                
   }
 extend type Query {
   allAddresses: [Address]
-  addressPages(offset: Int, limit: Int): AddressPage
+  addressPages(offset: Int, limit: Int, search: String, isShippingPlace: Boolean,): AddressPage
   addressById(id: ID): Address
   filteredAddresses (filter: String, type: String): [Address]
 }
