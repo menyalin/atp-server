@@ -10,7 +10,7 @@ export const createAddress = async (_, {
 }, { models: { Address } }) => {
   try {
     const data = await Address.create({ partner, address, shortName, note, isShippingPlace, isDeliveryPlace })
-    console.log(data);
+    console.log(data)
     return data
   } catch (e) {
     throw new Error('Ошибка создания записи Address')
@@ -30,11 +30,11 @@ export const addressById = async (_, { id }, { models: { Address } }) => {
 export const filteredAddresses = async (_, { filter, type }, { models: { Address } }) => {
   const searchQuery = {
     isActive: true,
-    [ Op.or ]: [
-      { shortName: { [ Op.iRegexp ]: filter } },
-      { partner: { [ Op.iRegexp ]: filter } },
-      { address: { [ Op.iRegexp ]: filter } },
-      { note: { [ Op.iRegexp ]: filter } },
+    [Op.or]: [
+      { shortName: { [Op.iRegexp]: filter } },
+      { partner: { [Op.iRegexp]: filter } },
+      { address: { [Op.iRegexp]: filter } },
+      { note: { [Op.iRegexp]: filter } }
     ]
   }
   if (type === 'shippingPlace') {
@@ -53,17 +53,24 @@ export const filteredAddresses = async (_, { filter, type }, { models: { Address
   return result
 }
 
-export const addressPages = async (_, { offset, limit, search }, { models: { Address } }) => {
+export const addressPages = async (_, { offset, limit, search, isDeliveryPlace, isShippingPlace }, { models: { Address } }) => {
   let searchQuery = {
     isActive: true
   }
+  if (isShippingPlace) {
+    searchQuery.isShippingPlace = true
+  }
+  if (isDeliveryPlace) {
+    searchQuery.isDeliveryPlace = true
+  }
+
   if (search) {
     searchQuery = Object.assign({}, searchQuery, {
-      [ Op.or ]: [
-        { shortName: { [ Op.iRegexp ]: search } },
-        { partner: { [ Op.iRegexp ]: search } },
-        { address: { [ Op.iRegexp ]: search } },
-        { note: { [ Op.iRegexp ]: search } },
+      [Op.or]: [
+        { shortName: { [Op.iRegexp]: search } },
+        { partner: { [Op.iRegexp]: search } },
+        { address: { [Op.iRegexp]: search } },
+        { note: { [Op.iRegexp]: search } }
       ]
     })
   }
@@ -71,7 +78,7 @@ export const addressPages = async (_, { offset, limit, search }, { models: { Add
     where: searchQuery,
     offset,
     limit,
-    order: [ 'id' ]
+    order: ['id']
   })
   return {
     addresses: res.rows,
