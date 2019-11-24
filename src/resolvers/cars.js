@@ -1,8 +1,9 @@
-import { carPage, createCar } from '../controllers/cars'
+import { carPage, createCar, cars } from '../controllers/cars'
 
 export default {
   Query: {
-    carPage
+    carPage,
+    cars
   },
   Mutation: {
     createCar
