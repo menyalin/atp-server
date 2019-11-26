@@ -1,20 +1,27 @@
 import { gql } from 'apollo-server-express'
 
+
 export default gql`
 type Order {
-  _id: ID
+  id: ID
   carType: String
+  shipperId: String
+  shipper: Address
+  consigneeId: String
+  consignee: Address
   status: String 
-  shippingPlaceId: String
-  shippingDate: String
-  shippingTime: String
-  deliveryPlaceId: String
-  deliveryDate: String
-  deliveryTime: String
-  confirmedCar: String
-  confirmedDate: String
-  confirmedTime: String
   note: String
+  confirmDate: String
+  managerId: String
+  manager: User
+}
+
+extend type Query {
+  orders: [Order]
+}
+
+extend type Mutation {
+  createOrder(carType: String!, confirmDate: String, shipperId: String, consigneeId: String): Order
 }
 
 `

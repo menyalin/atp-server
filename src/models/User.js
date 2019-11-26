@@ -26,4 +26,3 @@ User.init({
   modelName: 'user'
 })
 
-User.sync()
