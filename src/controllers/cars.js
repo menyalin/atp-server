@@ -1,3 +1,5 @@
+import { Op } from 'sequelize'
+
 export const carPage = async (_, { offset, limit }, { models: { Car } }) => {
   const searchQuery = {
     isActive: true
@@ -33,4 +35,27 @@ export const cars = async (_, { type }, { models: { Car } }) => {
   } catch (e) {
     throw new Error('Ошибка поиска в таблице "Cars"')
   }
+}
+
+export const filteredCars = async (_, { filter, carType }, { models: { Car } }) => {
+  const searchQuery = {
+    isActive: true,
+    title: { [ Op.iRegexp ]: filter }
+  }
+  try {
+    const result = await Car.findAll({
+      where: {
+        ...searchQuery
+      },
+      limit: 50
+    })
+    return result
+  } catch (e) {
+    throw new Error(e.message)
+  }
+}
+
+export const carById = async (_, { id }, { models: { Car } }) => {
+  const res = await Car.findByPk(id)
+  return res
 }

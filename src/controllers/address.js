@@ -30,11 +30,11 @@ export const addressById = async (_, { id }, { models: { Address } }) => {
 export const filteredAddresses = async (_, { filter, type }, { models: { Address } }) => {
   const searchQuery = {
     isActive: true,
-    [Op.or]: [
-      { shortName: { [Op.iRegexp]: filter } },
-      { partner: { [Op.iRegexp]: filter } },
-      { address: { [Op.iRegexp]: filter } },
-      { note: { [Op.iRegexp]: filter } }
+    [ Op.or ]: [
+      { shortName: { [ Op.iRegexp ]: filter } },
+      { partner: { [ Op.iRegexp ]: filter } },
+      { address: { [ Op.iRegexp ]: filter } },
+      { note: { [ Op.iRegexp ]: filter } }
     ]
   }
   if (type === 'shippingPlace') {
@@ -45,10 +45,9 @@ export const filteredAddresses = async (_, { filter, type }, { models: { Address
   }
   const result = await Address.findAll({
     where: {
-      isActive: true,
       ...searchQuery
     },
-    limit: 15
+    limit: 50
   })
   return result
 }
@@ -66,11 +65,11 @@ export const addressPages = async (_, { offset, limit, search, isDeliveryPlace, 
 
   if (search) {
     searchQuery = Object.assign({}, searchQuery, {
-      [Op.or]: [
-        { shortName: { [Op.iRegexp]: search } },
-        { partner: { [Op.iRegexp]: search } },
-        { address: { [Op.iRegexp]: search } },
-        { note: { [Op.iRegexp]: search } }
+      [ Op.or ]: [
+        { shortName: { [ Op.iRegexp ]: search } },
+        { partner: { [ Op.iRegexp ]: search } },
+        { address: { [ Op.iRegexp ]: search } },
+        { note: { [ Op.iRegexp ]: search } }
       ]
     })
   }
@@ -78,7 +77,7 @@ export const addressPages = async (_, { offset, limit, search, isDeliveryPlace, 
     where: searchQuery,
     offset,
     limit,
-    order: ['id']
+    order: [ 'id' ]
   })
   return {
     addresses: res.rows,
