@@ -12,10 +12,14 @@ const getMe = async (req) => {
   } else return null
 }
 
-export default async ({ req }) => {
-  const me = await getMe(req)
-  return {
-    models,
-    me
+export default async ({ req, connection }) => {
+  if (connection) {
+    return connection.context
+  } else {
+    const me = await getMe(req)
+    return {
+      models,
+      me
+    }
   }
 }

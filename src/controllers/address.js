@@ -1,4 +1,5 @@
 import { Op } from 'sequelize'
+import { pubsub } from '../pubsub'
 
 export const createAddress = async (_, {
   partner,
@@ -10,6 +11,7 @@ export const createAddress = async (_, {
 }, { models: { Address } }) => {
   try {
     const data = await Address.create({ partner, address, shortName, note, isShippingPlace, isDeliveryPlace })
+    pubsub.publish('addressAdded', { addressAdded: data })
     return data
   } catch (e) {
     throw new Error('Ошибка создания записи Address')
@@ -87,6 +89,7 @@ export const addressPages = async (_, { offset, limit, search, isDeliveryPlace, 
 export const updateAddress = async (_, { id, address, partner, shortName, note, isShippingPlace, isDeliveryPlace }, { models: { Address } }) => {
   const adr = await Address.findByPk(id)
   await adr.update({ address, partner, shortName, note, isShippingPlace, isDeliveryPlace })
+  pubsub.publish('addressUpdated', { addressUpdated: adr })
   return adr
 }
 
@@ -94,6 +97,7 @@ export const blockAddress = async (_, { id }, { models: { Address } }) => {
   try {
     const adr = await Address.findByPk(id)
     await adr.update({ isActive: false })
+    pubsub.publish('addressUpdated', { addressUpdated: adr })
     return true
   } catch (e) {
     return false

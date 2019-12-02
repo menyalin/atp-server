@@ -19,6 +19,10 @@ type AddressPage {
   totalCount: Int
 }
 
+type Subscription {
+  addressAdded: Address
+  addressUpdated: Address
+}
 
 extend type Mutation {
    createAddress (partner: String, 

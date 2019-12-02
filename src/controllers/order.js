@@ -1,4 +1,5 @@
 import { Op } from 'sequelize'
+import { pubsub } from '../pubsub'
 
 export const orders = async (_, args, { models: { Order, User, Address } }) => {
     const data = await Order.findAll({
@@ -13,6 +14,7 @@ export const orders = async (_, args, { models: { Order, User, Address } }) => {
 export const createOrder = async (_, args, { models: { Order }, me }) => {
     try {
         const newOrder = await Order.create({ ...args, managerId: me.id })
+        pubsub.publish('orderAdded', { orderAdded: newOrder })
         return newOrder
     } catch (e) {
         throw new Error(e)

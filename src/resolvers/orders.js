@@ -1,6 +1,8 @@
 import {
   orders, createOrder, orderPage, updateOrder, ordersForVuex
 } from '../controllers/order'
+import { pubsub } from '../pubsub'
+
 
 export default {
   Query: {
@@ -11,5 +13,10 @@ export default {
   Mutation: {
     createOrder,
     updateOrder
+  },
+  Subscription: {
+    orderAdded: {
+      subscribe: () => pubsub.asyncIterator([ 'orderAdded' ])
+    }
   }
 }
