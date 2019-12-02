@@ -41,6 +41,7 @@ extend type Query {
   addressPages(offset: Int, limit: Int, search: String, isShippingPlace: Boolean, isDeliveryPlace: Boolean): AddressPage
   addressById(id: ID): Address
   filteredAddresses (filter: String, type: String): [Address]
+  addressesForVuex: [Address]
 }
 
 `

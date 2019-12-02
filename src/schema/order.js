@@ -33,6 +33,7 @@ type OrderPage {
 extend type Query {
   orders: [Order]
   orderPage(limit: Int, offset: Int): OrderPage
+  ordersForVuex(startDate: String, endDate: String): [Order]
 }
 
 extend type Mutation {

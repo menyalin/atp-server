@@ -1,7 +1,7 @@
 
 import {
   allAddresses, createAddress, filteredAddresses,
-  addressById, addressPages, updateAddress, blockAddress
+  addressById, addressPages, updateAddress, blockAddress, addressesForVuex
 } from '../controllers/address'
 
 export default {
@@ -9,7 +9,8 @@ export default {
     allAddresses,
     filteredAddresses,
     addressById,
-    addressPages
+    addressPages,
+    addressesForVuex
   },
   Mutation: {
     createAddress,

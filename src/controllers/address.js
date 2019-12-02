@@ -10,7 +10,6 @@ export const createAddress = async (_, {
 }, { models: { Address } }) => {
   try {
     const data = await Address.create({ partner, address, shortName, note, isShippingPlace, isDeliveryPlace })
-    console.log(data)
     return data
   } catch (e) {
     throw new Error('Ошибка создания записи Address')
@@ -99,4 +98,9 @@ export const blockAddress = async (_, { id }, { models: { Address } }) => {
   } catch (e) {
     return false
   }
+}
+
+export const addressesForVuex = async (_, args, { models: { Address } }) => {
+  const addresses = await Address.findAll({})
+  return addresses
 }

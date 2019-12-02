@@ -1,3 +1,5 @@
+import { Op } from 'sequelize'
+
 export const orders = async (_, args, { models: { Order, User, Address } }) => {
     const data = await Order.findAll({
         include: [
@@ -49,4 +51,23 @@ export const updateOrder = async (_,
         isDriverNotified, isClientNotified, confirmedCarId
     })
     return updatedOrder
+}
+export const ordersForVuex = async (_, { startDate, endDate }, { models: { Order } }) => {
+    try {
+        const res = await Order.findAll({
+            where: {
+                [ Op.or ]: [
+                    { confirmDate: null },
+                    {
+                        confirmDate: {
+                            [ Op.gte ]: new Date(startDate),
+                            [ Op.lte ]: new Date(endDate)
+                        }
+                    } ]
+            }
+        })
+        return res
+    } catch (e) {
+        throw new Error(e.message)
+    }
 }
