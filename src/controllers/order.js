@@ -52,6 +52,7 @@ export const updateOrder = async (_,
         shippingDate, shippingTime, deliveryDate, deliveryTime,
         isDriverNotified, isClientNotified, confirmedCarId
     })
+    pubsub.publish('orderUpdated', { orderUpdated: updatedOrder })
     return updatedOrder
 }
 export const ordersForVuex = async (_, { startDate, endDate }, { models: { Order } }) => {

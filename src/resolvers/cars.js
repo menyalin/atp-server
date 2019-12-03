@@ -1,11 +1,12 @@
-import { carPage, createCar, cars, filteredCars, carById } from '../controllers/cars'
+import { carPage, createCar, cars, filteredCars, carById, carsForVuex } from '../controllers/cars'
 
 export default {
   Query: {
     carPage,
     cars,
     filteredCars,
-    carById
+    carById,
+    carsForVuex
   },
   Mutation: {
     createCar

@@ -25,6 +25,7 @@ type CarPage {
 extend type Query {
   carPage (offset: Int!, limit: Int!): CarPage
   cars(type: String): [Car]
+  carsForVuex: [Car]
   filteredCars(filter: String): [Car]
   carById(id: ID): Car
 }

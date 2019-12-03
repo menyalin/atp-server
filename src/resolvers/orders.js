@@ -17,6 +17,9 @@ export default {
   Subscription: {
     orderAdded: {
       subscribe: () => pubsub.asyncIterator([ 'orderAdded' ])
+    },
+    orderUpdated: {
+      subscribe: () => pubsub.asyncIterator([ 'orderUpdated' ])
     }
   }
 }

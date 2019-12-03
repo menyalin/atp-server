@@ -36,6 +36,15 @@ export const cars = async (_, { type }, { models: { Car } }) => {
     throw new Error('Ошибка поиска в таблице "Cars"')
   }
 }
+export const carsForVuex = async (_, args, { models: { Car } }) => {
+  try {
+    const res = Car.findAll()
+    return res
+  } catch (e) {
+    throw new Error('Ошибка поиска в таблице "Cars"')
+  }
+}
+
 
 export const filteredCars = async (_, { filter, carType }, { models: { Car } }) => {
   const searchQuery = {
