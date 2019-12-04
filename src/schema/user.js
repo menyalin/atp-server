@@ -1,6 +1,17 @@
 import { gql } from 'apollo-server-express'
 
 export default gql`
+
+type Schedule {
+  id: ID
+  type: String
+  date: String
+  carId: String
+  car: Car
+  userId: String
+  user: User
+}
+
 enum userRoleNames {
   admin
   dispatcher
@@ -40,6 +51,7 @@ type User {
     isExistEmail (email: String!): Boolean
     userPhones: [Phone]
     staff: [userRole]
+    scheduleForVuex(startDate: String, endDate: String): [Schedule]
   }
   type Mutation {
     createRole(userId: String, role: String): userRole

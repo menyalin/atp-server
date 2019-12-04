@@ -1,4 +1,4 @@
-import { User, UserRole } from './User'
+import { User, UserRole, Schedule } from './User'
 import Phone from './Phone'
 import Company from './Company'
 import Contract from './Contract'
@@ -8,6 +8,7 @@ import { Order } from './Order'
 
 export default {
   User,
+  Schedule,
   UserRole,
   Phone,
   Company,
@@ -16,3 +17,4 @@ export default {
   Car,
   Order
 }
+

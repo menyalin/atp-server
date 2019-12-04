@@ -1,11 +1,13 @@
 import {
   signupUser, signinUser, getCurrentUser, getAllUsers, isExistEmail, addMyPhone, getMyPhone, deleteMyPhone, updateMyPhone,
-  createRole, getUserRoles, staff
+  createRole, getUserRoles, staff,
+  scheduleForVuex
 } from '../controllers/user'
 
 export default {
   Query: {
     getCurrentUser,
+    scheduleForVuex,
     getAllUsers,
     isExistEmail,
     staff,

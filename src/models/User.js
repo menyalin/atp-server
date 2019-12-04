@@ -1,5 +1,6 @@
 import Sequelize, { Model } from 'sequelize'
 import { sequelize } from '../pgDB'
+import { Car } from './Car'
 
 export class User extends Model { }
 User.init({
@@ -46,8 +47,31 @@ UserRole.init({
   sequelize,
   modelName: 'userRole'
 })
-
 UserRole.belongsTo(User, { as: "user", constraints: false })
+
+export class Schedule extends Model { }
+Schedule.init({
+  id: {
+    type: Sequelize.UUID,
+    primaryKey: true,
+    defaultValue: Sequelize.UUIDV4,
+    unique: true
+  },
+  type: {
+    type: Sequelize.ENUM('dispatcher', 'driver'),
+    allowNull: false
+  },
+  date: {
+    type: Sequelize.DATEONLY,
+    allowNull: false
+  }
+}, {
+  sequelize,
+  modelName: 'schedule'
+})
+Schedule.belongsTo(User, { as: "user", constraints: false })
+Schedule.belongsTo(Car, { as: "car", constraints: false })
 
 User.sync()
 UserRole.sync()
+Schedule.sync()

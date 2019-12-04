@@ -1,5 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express'
 import jwt from 'jsonwebtoken'
+import { Op } from 'sequelize'
 
 const createToken = async (user) => {
   const token = await jwt.sign({
@@ -111,4 +112,24 @@ export const staff = async (_, args, { models: { UserRole, User } }) => {
     ]
   })
   return staff
+}
+
+export const scheduleForVuex = async (_, { startDate, endDate }, { models: { Schedule, User, Car } }) => {
+  try {
+    const res = await Schedule.findAll({
+      where: {
+        date: {
+          [ Op.gte ]: new Date(startDate),
+          [ Op.lte ]: new Date(endDate)
+        }
+      },
+      include: [
+        { model: User, as: "user" },
+        { model: Car, as: "car" }
+      ]
+    })
+    return res
+  } catch (e) {
+    throw new Error(e.message)
+  }
 }
