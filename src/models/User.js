@@ -26,3 +26,28 @@ User.init({
   modelName: 'user'
 })
 
+export class UserRole extends Model { }
+UserRole.init({
+  id: {
+    type: Sequelize.UUID,
+    primaryKey: true,
+    defaultValue: Sequelize.UUIDV4,
+    unique: true
+  },
+  role: {
+    type: Sequelize.ENUM('dispatcher', 'admin'),
+    allowNull: false
+  },
+  isActive: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true
+  }
+}, {
+  sequelize,
+  modelName: 'userRole'
+})
+
+UserRole.belongsTo(User, { as: "user", constraints: false })
+
+User.sync()
+UserRole.sync()

@@ -86,3 +86,29 @@ export const updateMyPhone = async (_, { _id, type, isMain }, { models: { Phone 
   const userPhones = await Phone.find({ userId: me.id, isActive: true })
   return userPhones
 }
+
+export const createRole = async (_, { userId, role }, { models: { UserRole } }) => {
+  const newRole = await UserRole.create({
+    userId,
+    role
+  })
+  return newRole
+}
+
+export const getUserRoles = async (user, args, { models: { UserRole } }) => {
+  const roles = await UserRole.findAll({
+    where: {
+      userId: user.id
+    }
+  })
+  return roles.map(item => item.role)
+}
+
+export const staff = async (_, args, { models: { UserRole, User } }) => {
+  const staff = await UserRole.findAll({
+    include: [
+      { model: User, as: "user" },
+    ]
+  })
+  return staff
+}

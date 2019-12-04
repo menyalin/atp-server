@@ -1,4 +1,4 @@
-import { User } from './User'
+import { User, UserRole } from './User'
 import Phone from './Phone'
 import Company from './Company'
 import Contract from './Contract'
@@ -8,6 +8,7 @@ import { Order } from './Order'
 
 export default {
   User,
+  UserRole,
   Phone,
   Company,
   Contract,
