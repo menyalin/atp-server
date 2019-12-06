@@ -1,5 +1,4 @@
 import 'dotenv/config'
-import './db'
 import './pgDB'
 const http = require('http')
 import cors from 'cors'
