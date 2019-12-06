@@ -53,6 +53,9 @@ type User {
     staff: [userRole]
     scheduleForVuex(startDate: String, endDate: String): [Schedule]
   }
+  extend type Subscription {
+    scheduleUpdated: Schedule
+  }
   type Mutation {
     createRole(userId: String, role: String): userRole
     signupUser(
@@ -64,5 +67,6 @@ type User {
     addMyPhone(type: String!, number: String!, isMain: Boolean): [Phone]
     deleteMyPhone(_id: String): [Phone]
     updateMyPhone(_id: String, type: String, isMain: Boolean): [Phone]
+    updateSchedule(date: String!, userId: String, scheduleId: String): Schedule
   }
 `

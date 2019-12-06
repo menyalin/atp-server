@@ -1,6 +1,8 @@
 import { AuthenticationError } from 'apollo-server-express'
 import jwt from 'jsonwebtoken'
 import { Op } from 'sequelize'
+import { pubsub } from '../pubsub'
+
 
 const createToken = async (user) => {
   const token = await jwt.sign({
@@ -131,5 +133,25 @@ export const scheduleForVuex = async (_, { startDate, endDate }, { models: { Sch
     return res
   } catch (e) {
     throw new Error(e.message)
+  }
+}
+
+export const updateSchedule = async (_, { scheduleId, date, userId }, { models: { Schedule, User } }) => {
+  if (scheduleId) {
+    let schedule = await Schedule.findByPk(scheduleId)
+    schedule.userId = userId
+    await schedule.save()
+    const res = await Schedule.findByPk(schedule.id, { include: [ { model: User, as: "user" } ] })
+    pubsub.publish('scheduleUpdated', { scheduleUpdated: res })
+    return res
+  } else {
+    let newSchedule = await Schedule.create({
+      type: 'dispatcher',
+      date: date,
+      userId: userId
+    })
+    const res = await Schedule.findByPk(newSchedule.id, { include: [ { model: User, as: "user" } ] })
+    pubsub.publish('scheduleUpdated', { scheduleUpdated: res })
+    return res
   }
 }
