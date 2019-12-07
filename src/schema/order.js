@@ -23,6 +23,8 @@ type Order {
   isClientNotified: Boolean
   confirmedCarId: String
   confirmedCar: Car
+  templateName: String
+  showInMenu: Boolean
 }
 
 type OrderPage {
@@ -32,6 +34,7 @@ type OrderPage {
 
 extend type Query {
   orders: [Order]
+  orderTemplates: [Order]
   orderPage(limit: Int, offset: Int): OrderPage
   ordersForVuex(startDate: String, endDate: String): [Order]
 }
@@ -42,6 +45,7 @@ extend type Subscription {
 
 
 extend type Mutation {
+  createOrderTemplate (carType: String!, shipperId: String, consigneeId: String, status: String, note: String, templateName: String ): Order
   createOrder(
     carType: String!, 
     confirmDate: String, 

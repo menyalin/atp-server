@@ -31,7 +31,7 @@ export const orderPage = async (_, { offset, limit }, { models: { Order, User, A
             ],
             offset,
             limit,
-            order: [ [ 'number', 'DESC' ] ]
+            order: [['number', 'DESC']]
         })
         return {
             orders: res.rows,
@@ -59,18 +59,30 @@ export const ordersForVuex = async (_, { startDate, endDate }, { models: { Order
     try {
         const res = await Order.findAll({
             where: {
-                [ Op.or ]: [
+                [Op.or]: [
                     { confirmDate: null },
                     {
                         confirmDate: {
-                            [ Op.gte ]: new Date(startDate),
-                            [ Op.lte ]: new Date(endDate)
+                            [Op.gte]: new Date(startDate),
+                            [Op.lte]: new Date(endDate)
                         }
-                    } ]
+                    }]
             }
         })
         return res
     } catch (e) {
         throw new Error(e.message)
     }
+}
+export const orderTemplates = async (_, args, { models: { OrderTemplate } }) => {
+    const res = await OrderTemplate.findAll({
+        where: {
+            isActive: true
+        }
+    })
+    return res
+}
+export const createOrderTemplate = async (_, args, { models: { OrderTemplate } }) => {
+    const newTemplate = await OrderTemplate.create(args)
+    return newTemplate
 }
