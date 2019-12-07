@@ -15,6 +15,8 @@ type Schedule {
 enum userRoleNames {
   admin
   dispatcher
+  manager
+  observer
 }
 type userRole {
   id: ID
@@ -22,23 +24,13 @@ type userRole {
   user: User
   role: userRoleNames
   isActive: Boolean
-}
-
-type Phone {
-    _id: ID
-    userId: String!
-    type: String!
-    number: String!
-    isActive: Boolean!
-    isMain: Boolean
-    created: String
-    deleted: String
-}  
+} 
 type User {
     id: ID
     email: String!
     name: String!
     password: String!
+    isActive: Boolean
     roles: [String]
  }
   type Token {
@@ -49,12 +41,13 @@ type User {
     getCurrentUser: User
     getAllUsers: [User]
     isExistEmail (email: String!): Boolean
-    userPhones: [Phone]
+    usersForAdminPanel: [User]
     staff: [userRole]
     scheduleForVuex(startDate: String, endDate: String): [Schedule]
   }
   extend type Subscription {
     scheduleUpdated: Schedule
+    staffUpdated: userRole
   }
   type Mutation {
     createRole(userId: String, role: String): userRole
@@ -64,9 +57,8 @@ type User {
       password: String
     ): Token!
     signinUser(email: String!, password: String!): Token!
-    addMyPhone(type: String!, number: String!, isMain: Boolean): [Phone]
-    deleteMyPhone(_id: String): [Phone]
-    updateMyPhone(_id: String, type: String, isMain: Boolean): [Phone]
+    changeUserStatus(userId: String!, isActive: Boolean!): User
+    changeDispatcherRole(userId: String!, isDispatcher: Boolean!): userRole
     updateSchedule(date: String!, userId: String, scheduleId: String): Schedule
   }
 `

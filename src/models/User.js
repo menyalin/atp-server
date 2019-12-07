@@ -21,6 +21,10 @@ User.init({
   },
   password: {
     type: Sequelize.STRING
+  },
+  isActive: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true
   }
 }, {
   sequelize,
@@ -36,7 +40,7 @@ UserRole.init({
     unique: true
   },
   role: {
-    type: Sequelize.ENUM('dispatcher', 'admin'),
+    type: Sequelize.ENUM('dispatcher', 'admin', 'manager', 'observer'),
     allowNull: false
   },
   isActive: {

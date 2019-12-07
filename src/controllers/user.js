@@ -55,41 +55,6 @@ export const isExistEmail = async (_, { email }, { models: { User } }) => {
   return !!user
 }
 
-export const getMyPhone = async (_, args, { models: { Phone }, me }) => {
-  const phones = await Phone.find({ userId: me.id, isActive: true })
-  return phones
-}
-
-export const addMyPhone = async (_, { type, number, isMain }, { models: { Phone }, me }) => {
-  const newMyPhone = new Phone({
-    userId: me.id,
-    type,
-    number,
-    isMain
-  })
-  if (newMyPhone.isMain) {
-    await Phone.updateMany({ userId: me.id }, { isMain: false })
-  }
-  await newMyPhone.save()
-  const userPhones = await Phone.find({ userId: me.id, isActive: true })
-  return userPhones
-}
-
-export const deleteMyPhone = async (_, { _id }, { models: { Phone }, me }) => {
-  await Phone.findOneAndUpdate({ _id, userId: me.id }, { isActive: false, deleted: new Date() })
-  const userPhones = await Phone.find({ userId: me._id, isActive: true })
-  return userPhones
-}
-
-export const updateMyPhone = async (_, { _id, type, isMain }, { models: { Phone }, me }) => {
-  if (isMain) {
-    await Phone.updateMany({ userId: me.id }, { isMain: false })
-  }
-  await Phone.findOneAndUpdate({ _id, userId: me.id }, { type, isMain })
-  const userPhones = await Phone.find({ userId: me.id, isActive: true })
-  return userPhones
-}
-
 export const createRole = async (_, { userId, role }, { models: { UserRole } }) => {
   const newRole = await UserRole.create({
     userId,
@@ -101,7 +66,8 @@ export const createRole = async (_, { userId, role }, { models: { UserRole } }) 
 export const getUserRoles = async (user, args, { models: { UserRole } }) => {
   const roles = await UserRole.findAll({
     where: {
-      userId: user.id
+      userId: user.id,
+      isActive: true
     }
   })
   return roles.map(item => item.role)
@@ -154,4 +120,50 @@ export const updateSchedule = async (_, { scheduleId, date, userId }, { models: 
     pubsub.publish('scheduleUpdated', { scheduleUpdated: res })
     return res
   }
+}
+
+export const usersForAdminPanel = async (_, args, { models: { User } }) => {
+  const allUsers = await User.findAll()
+  return allUsers
+}
+
+export const changeUserStatus = async (_, { userId, isActive }, { models: { User }, me }) => {
+  if (userId === me.id) {
+    throw new Error('Попытка закрытия доступа самому себе!')
+  }
+  let user = await User.findByPk(userId)
+  user.isActive = isActive
+  await user.save()
+  return user
+}
+
+export const changeDispatcherRole = async (_, { userId, isDispatcher }, { models: { User, UserRole } }) => {
+  let role = await UserRole.findOne({
+    where: {
+      userId,
+      role: 'dispatcher'
+    }, include: [
+      { model: User, as: "user" },
+    ]
+  })
+  if (role && isDispatcher) {
+    role.isActive = true
+    role.save()
+  } else if (role && !isDispatcher) {
+    role.isActive = false
+    role.save()
+  } else {
+    const newRole = await UserRole.create({
+      userId,
+      role: 'dispatcher',
+      isActive: true,
+    })
+    role = await UserRole.findByPk(newRole.id, {
+      include: [
+        { model: User, as: "user" },
+      ]
+    })
+  }
+  pubsub.publish('staffUpdated', { staffUpdated: role })
+  return role
 }

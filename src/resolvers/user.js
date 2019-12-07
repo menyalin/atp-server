@@ -1,17 +1,17 @@
 import {
-  signupUser, signinUser, getCurrentUser, getAllUsers, isExistEmail, addMyPhone, getMyPhone, deleteMyPhone, updateMyPhone,
-  createRole, getUserRoles, staff, updateSchedule, scheduleForVuex
+  signupUser, signinUser, getCurrentUser, getAllUsers, isExistEmail, changeUserStatus,
+  createRole, getUserRoles, staff, updateSchedule, scheduleForVuex, usersForAdminPanel, changeDispatcherRole
 } from '../controllers/user'
 import { pubsub } from '../pubsub'
 
 export default {
   Query: {
     getCurrentUser,
+    usersForAdminPanel,
     scheduleForVuex,
     getAllUsers,
     isExistEmail,
     staff,
-    userPhones: getMyPhone
   },
   User: {
     roles: getUserRoles
@@ -19,15 +19,17 @@ export default {
   Subscription: {
     scheduleUpdated: {
       subscribe: () => pubsub.asyncIterator([ 'scheduleUpdated' ])
+    },
+    staffUpdated: {
+      subscribe: () => pubsub.asyncIterator('staffUpdated')
     }
   },
   Mutation: {
     createRole,
     signinUser,
     signupUser,
-    addMyPhone,
-    deleteMyPhone,
-    updateMyPhone,
-    updateSchedule
+    updateSchedule,
+    changeUserStatus,
+    changeDispatcherRole
   }
 }
