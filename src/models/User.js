@@ -24,7 +24,7 @@ User.init({
   },
   isActive: {
     type: Sequelize.BOOLEAN,
-    defaultValue: true
+    defaultValue: false
   }
 }, {
   sequelize,
