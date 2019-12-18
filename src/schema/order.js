@@ -47,6 +47,7 @@ extend type Subscription {
 
 extend type Mutation {
   createOrderTemplate (carType: String!, shipperId: String, consigneeId: String, status: String, note: String, templateName: String ): Order
+  updateTemplate (id: ID, carType: String!, shipperId: String, consigneeId: String, status: String, note: String, templateName: String, showInMenu: Boolean ): Order
   createOrder(
     carType: String!, 
     confirmDate: String, 

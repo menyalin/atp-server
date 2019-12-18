@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken'
 import { Op } from 'sequelize'
 import { pubsub } from '../pubsub'
 
-
 const createToken = async (user) => {
   const token = await jwt.sign({
     id: user.id,
@@ -76,7 +75,7 @@ export const getUserRoles = async (user, args, { models: { UserRole } }) => {
 export const staff = async (_, args, { models: { UserRole, User } }) => {
   const staff = await UserRole.findAll({
     include: [
-      { model: User, as: "user" },
+      { model: User, as: 'user' }
     ]
   })
   return staff
@@ -87,13 +86,13 @@ export const scheduleForVuex = async (_, { startDate, endDate }, { models: { Sch
     const res = await Schedule.findAll({
       where: {
         date: {
-          [ Op.gte ]: new Date(startDate),
-          [ Op.lte ]: new Date(endDate)
+          [Op.gte]: new Date(startDate),
+          [Op.lte]: new Date(endDate)
         }
       },
       include: [
-        { model: User, as: "user" },
-        { model: Car, as: "car" }
+        { model: User, as: 'user' },
+        { model: Car, as: 'car' }
       ]
     })
     return res
@@ -104,19 +103,19 @@ export const scheduleForVuex = async (_, { startDate, endDate }, { models: { Sch
 
 export const updateSchedule = async (_, { scheduleId, date, userId }, { models: { Schedule, User } }) => {
   if (scheduleId) {
-    let schedule = await Schedule.findByPk(scheduleId)
+    const schedule = await Schedule.findByPk(scheduleId)
     schedule.userId = userId
     await schedule.save()
-    const res = await Schedule.findByPk(schedule.id, { include: [ { model: User, as: "user" } ] })
+    const res = await Schedule.findByPk(schedule.id, { include: [{ model: User, as: 'user' }] })
     pubsub.publish('scheduleUpdated', { scheduleUpdated: res })
     return res
   } else {
-    let newSchedule = await Schedule.create({
+    const newSchedule = await Schedule.create({
       type: 'dispatcher',
       date: date,
       userId: userId
     })
-    const res = await Schedule.findByPk(newSchedule.id, { include: [ { model: User, as: "user" } ] })
+    const res = await Schedule.findByPk(newSchedule.id, { include: [{ model: User, as: 'user' }] })
     pubsub.publish('scheduleUpdated', { scheduleUpdated: res })
     return res
   }
@@ -131,7 +130,7 @@ export const changeUserStatus = async (_, { userId, isActive }, { models: { User
   if (userId === me.id) {
     throw new Error('Попытка закрытия доступа самому себе!')
   }
-  let user = await User.findByPk(userId)
+  const user = await User.findByPk(userId)
   user.isActive = isActive
   await user.save()
   return user
@@ -142,8 +141,9 @@ export const changeDispatcherRole = async (_, { userId, isDispatcher }, { models
     where: {
       userId,
       role: 'dispatcher'
-    }, include: [
-      { model: User, as: "user" },
+    },
+    include: [
+      { model: User, as: 'user' }
     ]
   })
   if (role && isDispatcher) {
@@ -156,11 +156,11 @@ export const changeDispatcherRole = async (_, { userId, isDispatcher }, { models
     const newRole = await UserRole.create({
       userId,
       role: 'dispatcher',
-      isActive: true,
+      isActive: true
     })
     role = await UserRole.findByPk(newRole.id, {
       include: [
-        { model: User, as: "user" },
+        { model: User, as: 'user' }
       ]
     })
   }

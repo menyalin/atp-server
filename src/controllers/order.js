@@ -94,3 +94,11 @@ export const createOrderTemplate = async (_, args, { models: { OrderTemplate } }
   pubsub.publish('orderTemplateUpdated', { orderTemplateUpdated: newTemplate })
   return newTemplate
 }
+export const updateTemplate = async (_, args, { models: { OrderTemplate } }) => {
+  const templateId = args.id
+  delete args.id
+  const updatedTemplate = await OrderTemplate.findByPk(templateId)
+  await updatedTemplate.update(args)
+  pubsub.publish('orderTemplateUpdated', { orderTemplateUpdated: updatedTemplate })
+  return updatedTemplate
+}
