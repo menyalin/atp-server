@@ -23,6 +23,9 @@ export default {
     },
     orderUpdated: {
       subscribe: () => pubsub.asyncIterator(['orderUpdated'])
+    },
+    orderTemplateUpdated: {
+      subscribe: () => pubsub.asyncIterator(['orderTemplateUpdated'])
     }
   }
 }

@@ -19,7 +19,6 @@ export const carPage = async (_, { offset, limit }, { models: { Car } }) => {
 export const createCar = async (_, args, { models: { Car } }) => {
   try {
     const data = await Car.create(args)
-    console.log(data)
     return data
   } catch (e) {
     throw new Error('Ошибка создания записи Car')
@@ -45,11 +44,10 @@ export const carsForVuex = async (_, args, { models: { Car } }) => {
   }
 }
 
-
 export const filteredCars = async (_, { filter, carType }, { models: { Car } }) => {
   const searchQuery = {
     isActive: true,
-    title: { [ Op.iRegexp ]: filter }
+    title: { [Op.iRegexp]: filter }
   }
   try {
     const result = await Car.findAll({

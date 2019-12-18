@@ -41,6 +41,7 @@ extend type Query {
 extend type Subscription {
   orderAdded: Order
   orderUpdated: Order
+  orderTemplateUpdated: Order
 }
 
 
