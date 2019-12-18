@@ -4,7 +4,6 @@ import {
 } from '../controllers/order'
 import { pubsub } from '../pubsub'
 
-
 export default {
   Query: {
     orders,
