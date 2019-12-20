@@ -39,7 +39,8 @@ export const getCurrentUser = async (_, args, { models: { User }, me }) => {
   if (!me) {
     throw new AuthenticationError('foul_token')
   } else {
-    const user = await User.findByPk(me.id)
+    const user = await User.findOne({ where: { id: me.id, isActive: true } })
+    console.log(user)
     return user
   }
 }

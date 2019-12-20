@@ -11,14 +11,14 @@ export default {
     scheduleForVuex,
     getAllUsers,
     isExistEmail,
-    staff,
+    staff
   },
   User: {
     roles: getUserRoles
   },
   Subscription: {
     scheduleUpdated: {
-      subscribe: () => pubsub.asyncIterator([ 'scheduleUpdated' ])
+      subscribe: () => pubsub.asyncIterator(['scheduleUpdated'])
     },
     staffUpdated: {
       subscribe: () => pubsub.asyncIterator('staffUpdated')
