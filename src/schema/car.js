@@ -48,11 +48,12 @@ extend type Query {
 
 extend type Subscription {
   updatedCarWorkSchedule: CarWorkSchedule
+  deletedCarWorkSchedule: String
 }
 extend type Mutation {
   createCar (title: String!, isOwned: Boolean!, type: String!, maxPltCount: Int, note: String, reg: String, pts: String): Car
   createCarWorkSchedule(carId: String!, type: CarWorkScheduleType!, startDate: String!, startTime: String!, endDate: String!, endTime: String!, note: String): CarWorkSchedule
   updateCarWorkSchedule(id: ID!, carId: String!, type: CarWorkScheduleType!, startDate: String!, startTime: String!, endDate: String!, endTime: String!, note: String): CarWorkSchedule
+  deleteCarWorkSchedule(id: ID!): Boolean 
 }
-
 `

@@ -96,3 +96,13 @@ export const carWorkScheduleForVuex = async (_, args, { models: { CarWorkSchedul
     throw new Error('Ошибка поиска в таблице "CarWorkSchedule"')
   }
 }
+export const deleteCarWorkSchedule = async (_, { id }, { models: { CarWorkSchedule } }) => {
+  try {
+    const item = await CarWorkSchedule.findByPk(id)
+    await item.destroy()
+    pubsub.publish('deletedCarWorkSchedule', { deletedCarWorkSchedule: id })
+    return true
+  } catch (e) {
+    throw new Error('Ошибка удаления записи')
+  }
+}
