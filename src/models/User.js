@@ -51,7 +51,7 @@ UserRole.init({
   sequelize,
   modelName: 'userRole'
 })
-UserRole.belongsTo(User, { as: "user", constraints: false })
+UserRole.belongsTo(User, { as: 'user', constraints: false })
 
 export class Schedule extends Model { }
 Schedule.init({
@@ -73,8 +73,8 @@ Schedule.init({
   sequelize,
   modelName: 'schedule'
 })
-Schedule.belongsTo(User, { as: "user", constraints: false })
-Schedule.belongsTo(Car, { as: "car", constraints: false })
+Schedule.belongsTo(User, { as: 'user', constraints: false })
+Schedule.belongsTo(Car, { as: 'car', constraints: false })
 
 User.sync()
 UserRole.sync()

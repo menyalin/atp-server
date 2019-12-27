@@ -1,4 +1,8 @@
-import { carPage, createCar, cars, filteredCars, carById, carsForVuex } from '../controllers/cars'
+import {
+  carPage, createCar, cars, filteredCars, carById, carsForVuex, createCarWorkSchedule, carWorkScheduleForVuex,
+  updateCarWorkSchedule
+} from '../controllers/cars'
+import { pubsub } from '../pubsub'
 
 export default {
   Query: {
@@ -6,9 +10,17 @@ export default {
     cars,
     filteredCars,
     carById,
-    carsForVuex
+    carsForVuex,
+    carWorkScheduleForVuex
   },
   Mutation: {
-    createCar
+    createCar,
+    createCarWorkSchedule,
+    updateCarWorkSchedule
+  },
+  Subscription: {
+    updatedCarWorkSchedule: {
+      subscribe: () => pubsub.asyncIterator('updatedCarWorkSchedule')
+    }
   }
 }

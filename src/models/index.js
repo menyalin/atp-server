@@ -1,6 +1,6 @@
 import { User, UserRole, Schedule } from './User'
 import { Address } from './Address'
-import { Car } from './Car'
+import { Car, CarWorkSchedule } from './Car'
 import { Order, OrderTemplate } from './Order'
 
 export default {
@@ -10,6 +10,6 @@ export default {
   UserRole,
   Address,
   Car,
+  CarWorkSchedule,
   Order
 }
-

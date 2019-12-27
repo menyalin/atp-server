@@ -95,12 +95,9 @@ OrderTemplate.init({
   modelName: 'orderTemplate'
 })
 
-
-Order.belongsTo(User, { as: "manager", constraints: false })
-Order.belongsTo(Address, { as: "shipper", constraints: false })
-Order.belongsTo(Address, { as: "consignee", constraints: false })
-Order.belongsTo(Car, { as: "confirmedCar", constraints: false })
+Order.belongsTo(User, { as: 'manager', constraints: false })
+Order.belongsTo(Address, { as: 'shipper', constraints: false })
+Order.belongsTo(Address, { as: 'consignee', constraints: false })
+Order.belongsTo(Car, { as: 'confirmedCar', constraints: false })
 Order.sync()
 OrderTemplate.sync()
-
-

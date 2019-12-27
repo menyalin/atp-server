@@ -2,6 +2,10 @@ import { gql } from 'apollo-server-express'
 
 export default gql`
 
+enum CarWorkScheduleType {
+  service
+  holiday
+}
 
 type Car {
   id: ID
@@ -16,6 +20,17 @@ type Car {
   createdAt: String
   updatedAt: String
 }
+type CarWorkSchedule {
+  id: ID
+  carId: String
+  car: Car
+  type: CarWorkScheduleType
+  startDate: String
+  startTime: String
+  endDate: String
+  endTime: String
+  note: String
+}
 
 type CarPage {
   cars: [Car]
@@ -28,10 +43,16 @@ extend type Query {
   carsForVuex: [Car]
   filteredCars(filter: String): [Car]
   carById(id: ID): Car
+  carWorkScheduleForVuex: [CarWorkSchedule]
 }
 
+extend type Subscription {
+  updatedCarWorkSchedule: CarWorkSchedule
+}
 extend type Mutation {
   createCar (title: String!, isOwned: Boolean!, type: String!, maxPltCount: Int, note: String, reg: String, pts: String): Car
+  createCarWorkSchedule(carId: String!, type: CarWorkScheduleType!, startDate: String!, startTime: String!, endDate: String!, endTime: String!, note: String): CarWorkSchedule
+  updateCarWorkSchedule(id: ID!, carId: String!, type: CarWorkScheduleType!, startDate: String!, startTime: String!, endDate: String!, endTime: String!, note: String): CarWorkSchedule
 }
 
 `

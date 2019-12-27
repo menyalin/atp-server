@@ -39,5 +39,33 @@ Car.init({
   sequelize,
   modelName: 'car'
 })
+export class CarWorkSchedule extends Model { }
+
+CarWorkSchedule.init({
+  type: {
+    type: Sequelize.ENUM('service', 'holiday')
+  },
+  startDate: {
+    type: Sequelize.DATEONLY
+  },
+  startTime: {
+    type: Sequelize.STRING(5)
+  },
+  endDate: {
+    type: Sequelize.DATEONLY
+  },
+  endTime: {
+    type: Sequelize.STRING(5)
+  },
+  note: {
+    type: Sequelize.TEXT
+  }
+}, {
+  sequelize,
+  modelName: 'carWorkSchedule'
+})
+
+CarWorkSchedule.belongsTo(Car, { as: 'car', constraints: false })
 
 Car.sync()
+CarWorkSchedule.sync()
