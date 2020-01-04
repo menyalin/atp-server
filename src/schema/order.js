@@ -11,8 +11,8 @@ type Order {
   consignee: Address
   status: String 
   note: String
-  confirmDate: String
-  confirmTime: String
+  startDate: String
+  endDate: String
   managerId: String
   manager: User
   shippingDate: String
@@ -21,10 +21,11 @@ type Order {
   deliveryTime: String
   isDriverNotified: Boolean
   isClientNotified: Boolean
-  confirmedCarId: String
-  confirmedCar: Car
+  carId: String
+  car: Car
   templateName: String
   showInMenu: Boolean
+  lengthCell: Int
 }
 
 type OrderPage {
@@ -50,11 +51,11 @@ extend type Mutation {
   updateTemplate (id: ID, carType: String!, shipperId: String, consigneeId: String, status: String, note: String, templateName: String, showInMenu: Boolean ): Order
   createOrder(
     carType: String!, 
-    confirmDate: String, 
-    confirmTime: String, 
+    startDate: String, 
+    endDate: String, 
     shipperId: String, 
     consigneeId: String,
-    confirmedCarId: String, 
+    carId: String, 
     status: String, 
     note: String, 
     shippingDate: String, 
@@ -62,16 +63,17 @@ extend type Mutation {
     deliveryDate: String, 
     deliveryTime: String,
     isDriverNotified: Boolean,
-    isClientNotified: Boolean
+    isClientNotified: Boolean,
+    lengthCell: Int
     ): Order
   updateOrder (
     id: ID
     carType: String, 
-    confirmDate: String, 
-    confirmTime: String, 
+    startDate: String, 
+    endDate: String, 
     shipperId: String, 
     consigneeId: String, 
-    confirmedCarId: String, 
+    carId: String, 
     status: String, 
     note: String, 
     shippingDate: String, 
@@ -80,6 +82,7 @@ extend type Mutation {
     deliveryTime: String
     isDriverNotified: Boolean
     isClientNotified: Boolean
+    lengthCell: Int
     ): Order
 }
 

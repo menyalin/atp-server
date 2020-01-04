@@ -46,19 +46,18 @@ CarWorkSchedule.init({
     type: Sequelize.ENUM('service', 'holiday')
   },
   startDate: {
-    type: Sequelize.DATEONLY
-  },
-  startTime: {
-    type: Sequelize.STRING(5)
+    type: Sequelize.DATE,
+    allowNull: false
   },
   endDate: {
-    type: Sequelize.DATEONLY
-  },
-  endTime: {
-    type: Sequelize.STRING(5)
+    type: Sequelize.DATE,
+    allowNull: false
   },
   note: {
     type: Sequelize.TEXT
+  },
+  lengthCell: {
+    type: Sequelize.INTEGER
   }
 }, {
   sequelize,
@@ -68,4 +67,4 @@ CarWorkSchedule.init({
 CarWorkSchedule.belongsTo(Car, { as: 'car', constraints: false })
 
 Car.sync()
-CarWorkSchedule.sync()
+CarWorkSchedule.sync({ force: true })

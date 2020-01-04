@@ -23,21 +23,22 @@ Order.init({
   note: {
     type: Sequelize.TEXT
   },
-  confirmDate: {
-    type: Sequelize.DATEONLY,
+  startDate: {
+    type: Sequelize.DATE,
     defaultValue: null
   },
-  confirmTime: {
-    type: Sequelize.ENUM('01', '02', '03', '04')
+  endDate: {
+    type: Sequelize.DATE,
+    defaultValue: null
   },
   shippingDate: {
-    type: Sequelize.DATEONLY
+    type: Sequelize.DATE
   },
   shippingTime: {
     type: Sequelize.STRING(10)
   },
   deliveryDate: {
-    type: Sequelize.DATEONLY
+    type: Sequelize.DATE
   },
   deliveryTime: {
     type: Sequelize.STRING(10)
@@ -49,8 +50,10 @@ Order.init({
   isClientNotified: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
+  },
+  lengthCell: {
+    type: Sequelize.INTEGER
   }
-
 }, {
   sequelize,
   modelName: 'order'
@@ -89,6 +92,9 @@ OrderTemplate.init({
   },
   consigneeId: {
     type: Sequelize.STRING(60)
+  },
+  lengthCell: {
+    type: Sequelize.INTEGER
   }
 }, {
   sequelize,
@@ -98,6 +104,6 @@ OrderTemplate.init({
 Order.belongsTo(User, { as: 'manager', constraints: false })
 Order.belongsTo(Address, { as: 'shipper', constraints: false })
 Order.belongsTo(Address, { as: 'consignee', constraints: false })
-Order.belongsTo(Car, { as: 'confirmedCar', constraints: false })
-Order.sync()
-OrderTemplate.sync()
+Order.belongsTo(Car, { as: 'car', constraints: false })
+Order.sync({ force: true })
+OrderTemplate.sync({ force: true })

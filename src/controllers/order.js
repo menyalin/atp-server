@@ -27,7 +27,7 @@ export const orderPage = async (_, { offset, limit }, { models: { Order, User, A
         { model: User, as: 'manager' },
         { model: Address, as: 'shipper' },
         { model: Address, as: 'consignee' },
-        { model: Car, as: 'confirmedCar' }
+        { model: Car, as: 'car' }
       ],
       offset,
       limit,
@@ -41,24 +41,11 @@ export const orderPage = async (_, { offset, limit }, { models: { Order, User, A
     throw new Error('Ошибка OrderPage: ', e.message)
   }
 }
-export const updateOrder = async (_, { id, carType, status, shipperId, consigneeId, note, confirmDate, confirmTime, shippingDate, shippingTime, deliveryDate, deliveryTime, isDriverNotified, isClientNotified, confirmedCarId }, { models: { Order } }) => {
+export const updateOrder = async (_, args, { models: { Order } }) => {
+  const { id } = args
+  delete args.id
   const updatedOrder = await Order.findByPk(id)
-  await updatedOrder.update({
-    carType,
-    status,
-    shipperId,
-    consigneeId,
-    note,
-    confirmDate,
-    confirmTime,
-    shippingDate,
-    shippingTime,
-    deliveryDate,
-    deliveryTime,
-    isDriverNotified,
-    isClientNotified,
-    confirmedCarId
-  })
+  await updatedOrder.update(args)
   pubsub.publish('orderUpdated', { orderUpdated: updatedOrder })
   return updatedOrder
 }

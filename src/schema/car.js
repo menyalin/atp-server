@@ -26,10 +26,9 @@ type CarWorkSchedule {
   car: Car
   type: CarWorkScheduleType
   startDate: String
-  startTime: String
   endDate: String
-  endTime: String
   note: String
+  lengthCell: Int
 }
 
 type CarPage {
@@ -52,8 +51,8 @@ extend type Subscription {
 }
 extend type Mutation {
   createCar (title: String!, isOwned: Boolean!, type: String!, maxPltCount: Int, note: String, reg: String, pts: String): Car
-  createCarWorkSchedule(carId: String!, type: CarWorkScheduleType!, startDate: String!, startTime: String!, endDate: String!, endTime: String!, note: String): CarWorkSchedule
-  updateCarWorkSchedule(id: ID!, carId: String!, type: CarWorkScheduleType!, startDate: String!, startTime: String!, endDate: String!, endTime: String!, note: String): CarWorkSchedule
+  createCarWorkSchedule(carId: String!, type: CarWorkScheduleType!, startDate: String!, endDate: String!, note: String, lengthCell:Int): CarWorkSchedule
+  updateCarWorkSchedule(id: ID!, carId: String!, type: CarWorkScheduleType!, startDate: String!, endDate: String!, note: String, lengthCell:Int): CarWorkSchedule
   deleteCarWorkSchedule(id: ID!): Boolean 
 }
 `
