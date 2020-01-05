@@ -1,4 +1,5 @@
 import { Op } from 'sequelize'
+import { sequelize } from '../pgDB'
 import { pubsub } from '../pubsub'
 
 export const carPage = async (_, { offset, limit }, { models: { Car } }) => {
@@ -65,25 +66,48 @@ export const carById = async (_, { id }, { models: { Car } }) => {
 }
 export const createCarWorkSchedule = async (_, args, { models: { CarWorkSchedule } }) => {
   try {
-    const data = await CarWorkSchedule.create(args)
-    pubsub.publish('updatedCarWorkSchedule', { updatedCarWorkSchedule: data })
-    return data
+    const res = await sequelize.query(`
+      INSERT INTO "carWorkSchedules" ( type, "carId", "dateRange", note, title, "createdAt", "updatedAt" )
+      VALUES ( :type, :carId, :dateRange, :note, :title, :createdAt, :updatedAt)
+      RETURNING *
+      `, {
+      replacements: {
+        type: args.type,
+        carId: args.carId,
+        note: args.note,
+        dateRange: args.dateRange,
+        title: args.title,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      type: sequelize.QueryTypes.INSERT
+    })
+    pubsub.publish('createdCarWorkSchedule', { createdCarWorkSchedule: res[0][0] })
+    return res[0][0]
   } catch (e) {
     throw new Error('Ошибка создания записи CarWorkSchedule')
   }
 }
 export const updateCarWorkSchedule = async (_, args, { models: { CarWorkSchedule } }) => {
-  const scheduleId = args.id
-  delete args.id
   try {
-    const updatedCarWorkSchedule = await CarWorkSchedule.findByPk(scheduleId)
-    if (updatedCarWorkSchedule) {
-      await updatedCarWorkSchedule.update(args)
-      pubsub.publish('updatedCarWorkSchedule', { updatedCarWorkSchedule })
-      return updatedCarWorkSchedule
-    } else {
-      throw new Error(`Запись с ID ${scheduleId} не найдена`)
-    }
+    const res = await sequelize.query(`
+      UPDATE "carWorkSchedules" 
+      SET type=:type, "carId"=:carId, "dateRange"=:dateRange, note=:note, title=:title, "updatedAt"=:updatedAt 
+      WHERE id=:id
+      RETURNING *;
+    `, {
+      replacements: {
+        id: args.id,
+        type: args.type,
+        carId: args.carId,
+        note: args.note,
+        dateRange: args.dateRange,
+        title: args.title,
+        updatedAt: new Date()
+      }
+    })
+    pubsub.publish('updatedCarWorkSchedule', { updatedCarWorkSchedule: res[0][0] })
+    return res[0][0]
   } catch (e) {
     throw new Error('Ошибка обновления записи CarWorkSchedule')
   }
