@@ -74,15 +74,15 @@ export const createCarWorkSchedule = async (_, args, { models: { CarWorkSchedule
       replacements: {
         type: args.type,
         carId: args.carId,
-        note: args.note,
+        note: args.note || null,
         dateRange: args.dateRange,
-        title: args.title,
+        title: args.title || null,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       type: sequelize.QueryTypes.INSERT
     })
-    pubsub.publish('createdCarWorkSchedule', { createdCarWorkSchedule: res[0][0] })
+    pubsub.publish('updatedCarWorkSchedule', { updatedCarWorkSchedule: res[0][0] })
     return res[0][0]
   } catch (e) {
     throw new Error('Ошибка создания записи CarWorkSchedule')

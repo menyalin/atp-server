@@ -11,8 +11,7 @@ type Order {
   consignee: Address
   status: String 
   note: String
-  startDate: String
-  endDate: String
+  dateRange: [dateRange]
   managerId: String
   manager: User
   shippingDate: String
@@ -25,7 +24,6 @@ type Order {
   car: Car
   templateName: String
   showInMenu: Boolean
-  lengthCell: Int
 }
 
 type OrderPage {
@@ -47,12 +45,11 @@ extend type Subscription {
 
 
 extend type Mutation {
-  createOrderTemplate (carType: String!, shipperId: String, consigneeId: String, status: String, note: String, templateName: String ): Order
-  updateTemplate (id: ID, carType: String!, shipperId: String, consigneeId: String, status: String, note: String, templateName: String, showInMenu: Boolean ): Order
+  createOrderTemplate (carType: String!, shipperId: String, consigneeId: String, status: String, note: String, templateName: String, lengthCell:Int ): Order
+  updateTemplate (id: ID, carType: String!, shipperId: String, consigneeId: String, status: String, note: String, templateName: String, showInMenu: Boolean, lengthCell:Int): Order
   createOrder(
     carType: String!, 
-    startDate: String, 
-    endDate: String, 
+    dateRange: String,
     shipperId: String, 
     consigneeId: String,
     carId: String, 
@@ -69,8 +66,7 @@ extend type Mutation {
   updateOrder (
     id: ID
     carType: String, 
-    startDate: String, 
-    endDate: String, 
+   dateRange: String,
     shipperId: String, 
     consigneeId: String, 
     carId: String, 
