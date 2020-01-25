@@ -12,8 +12,6 @@ type Order {
   status: String 
   note: String
   dateRange: [dateRange]
-  managerId: String
-  manager: User
   shippingDate: String
   shippingTime: String
   deliveryDate: String
@@ -49,7 +47,7 @@ extend type Mutation {
   updateTemplate (id: ID, carType: String!, shipperId: String, consigneeId: String, status: String, note: String, templateName: String, showInMenu: Boolean, lengthCell:Int): Order
   createOrder(
     carType: String!, 
-    dateRange: String,
+    dateRange: String!,
     shipperId: String, 
     consigneeId: String,
     carId: String, 
@@ -59,14 +57,12 @@ extend type Mutation {
     shippingTime: String, 
     deliveryDate: String, 
     deliveryTime: String,
-    isDriverNotified: Boolean,
-    isClientNotified: Boolean,
     lengthCell: Int
     ): Order
   updateOrder (
-    id: ID
-    carType: String, 
-   dateRange: String,
+    id: ID!
+    carType: String!, 
+    dateRange: String!,
     shipperId: String, 
     consigneeId: String, 
     carId: String, 

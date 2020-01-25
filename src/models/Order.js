@@ -1,6 +1,5 @@
 import Sequelize, { Model } from 'sequelize'
 import { sequelize } from '../pgDB'
-import { User } from './User'
 import { Address } from './Address'
 import { Car } from './Car'
 
@@ -23,13 +22,8 @@ Order.init({
   note: {
     type: Sequelize.TEXT
   },
-  startDate: {
-    type: Sequelize.DATE,
-    defaultValue: null
-  },
-  endDate: {
-    type: Sequelize.DATE,
-    defaultValue: null
+  dateRange: {
+    type: Sequelize.RANGE(Sequelize.DATE)
   },
   shippingDate: {
     type: Sequelize.DATE
@@ -101,9 +95,8 @@ OrderTemplate.init({
   modelName: 'orderTemplate'
 })
 
-Order.belongsTo(User, { as: 'manager', constraints: false })
 Order.belongsTo(Address, { as: 'shipper', constraints: false })
 Order.belongsTo(Address, { as: 'consignee', constraints: false })
 Order.belongsTo(Car, { as: 'car', constraints: false })
-Order.sync({ force: true })
-OrderTemplate.sync({ force: true })
+Order.sync()
+OrderTemplate.sync()

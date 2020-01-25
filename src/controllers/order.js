@@ -1,19 +1,20 @@
 import { Op } from 'sequelize'
 import { pubsub } from '../pubsub'
+import { parseDateRange } from '../utils'
 
-export const orders = async (_, args, { models: { Order, User, Address } }) => {
+export const orders = async (_, args, { models: { Order, Address } }) => {
   const data = await Order.findAll({
     include: [
-      { model: User, as: 'manager' },
       { model: Address, as: 'shipper' },
       { model: Address, as: 'consignee' }
     ]
   })
   return data
 }
-export const createOrder = async (_, args, { models: { Order }, me }) => {
+export const createOrder = async (_, args, { models: { Order } }) => {
   try {
-    const newOrder = await Order.create({ ...args, managerId: me.id })
+    args.dateRange = parseDateRange(args.dateRange)
+    const newOrder = await Order.create(args)
     pubsub.publish('orderAdded', { orderAdded: newOrder })
     return newOrder
   } catch (e) {
