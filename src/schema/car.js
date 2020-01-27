@@ -15,8 +15,10 @@ enum CarWorkScheduleType {
 type Car {
   id: ID
   title: String
+  listItem: Int
   reg: String
   pts: String
+  isTempSlot: Boolean
   isOwned: Boolean
   type: String
   maxPltCount: Int
@@ -54,7 +56,7 @@ extend type Subscription {
   deletedCarWorkSchedule: String
 }
 extend type Mutation {
-  createCar (title: String!, isOwned: Boolean!, type: String!, maxPltCount: Int, note: String, reg: String, pts: String): Car
+  createCar (title: String!, isOwned: Boolean!, type: String!, maxPltCount: Int, note: String, reg: String, pts: String, listItem: Int): Car
   createCarWorkSchedule(carId: String!, type: CarWorkScheduleType!, dateRange: String!, note: String, title: String): CarWorkSchedule
   updateCarWorkSchedule(id: ID!, carId: String!, type: CarWorkScheduleType!, dateRange: String!, note: String, title: String): CarWorkSchedule
   deleteCarWorkSchedule(id: ID!): Boolean 

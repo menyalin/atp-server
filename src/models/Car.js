@@ -13,6 +13,14 @@ Car.init({
     allowNull: false,
     unique: true
   },
+  listItem: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0
+  },
+  isTempSlot: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
+  },
   reg: {
     type: Sequelize.TEXT
   },
