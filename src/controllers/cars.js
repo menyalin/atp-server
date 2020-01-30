@@ -1,6 +1,7 @@
 import { Op } from 'sequelize'
 import { sequelize } from '../pgDB'
 import { pubsub } from '../pubsub'
+import { parseDateRange, searchCross } from '../utils'
 
 export const carPage = async (_, { offset, limit }, { models: { Car } }) => {
   const searchQuery = {
@@ -66,50 +67,29 @@ export const carById = async (_, { id }, { models: { Car } }) => {
   const res = await Car.findByPk(id)
   return res
 }
-export const createCarWorkSchedule = async (_, args, { models: { CarWorkSchedule } }) => {
+export const createCarWorkSchedule = async (_, args, { models: { CarWorkSchedule, Order } }) => {
   try {
-    const res = await sequelize.query(`
-      INSERT INTO "carWorkSchedules" ( type, "carId", "dateRange", note, title, "createdAt", "updatedAt" )
-      VALUES ( :type, :carId, :dateRange, :note, :title, :createdAt, :updatedAt)
-      RETURNING *
-      `, {
-      replacements: {
-        type: args.type,
-        carId: args.carId,
-        note: args.note || null,
-        dateRange: args.dateRange,
-        title: args.title || null,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      type: sequelize.QueryTypes.INSERT
-    })
-    pubsub.publish('updatedCarWorkSchedule', { updatedCarWorkSchedule: res[0][0] })
-    return res[0][0]
+    args.dateRange = parseDateRange(args.dateRange)
+    if (await searchCross(args.carId, args.dateRange, Order)) throw new Error('Пересечение с рейсом!')
+    if (await searchCross(args.carId, args.dateRange, CarWorkSchedule)) throw new Error('Пересечение! Транспортное средство недоступно. Сервис или выходной')
+    const newCarSchedule = await CarWorkSchedule.create(args)
+    pubsub.publish('updatedCarWorkSchedule', { updatedCarWorkSchedule: newCarSchedule })
+    return newCarSchedule
   } catch (e) {
     throw new Error('Ошибка создания записи CarWorkSchedule')
   }
 }
-export const updateCarWorkSchedule = async (_, args, { models: { CarWorkSchedule } }) => {
+export const updateCarWorkSchedule = async (_, args, { models: { CarWorkSchedule, Order } }) => {
   try {
-    const res = await sequelize.query(`
-      UPDATE "carWorkSchedules" 
-      SET type=:type, "carId"=:carId, "dateRange"=:dateRange, note=:note, title=:title, "updatedAt"=:updatedAt 
-      WHERE id=:id
-      RETURNING *;
-    `, {
-      replacements: {
-        id: args.id,
-        type: args.type,
-        carId: args.carId,
-        note: args.note,
-        dateRange: args.dateRange,
-        title: args.title,
-        updatedAt: new Date()
-      }
-    })
-    pubsub.publish('updatedCarWorkSchedule', { updatedCarWorkSchedule: res[0][0] })
-    return res[0][0]
+    const { id } = args
+    delete args.id
+    args.dateRange = parseDateRange(args.dateRange)
+    if (await searchCross(args.carId, args.dateRange, Order)) throw new Error('Пересечение с рейсом!')
+    if (await searchCross(args.carId, args.dateRange, CarWorkSchedule)) throw new Error('Пересечение! Транспортное средство недоступно. Сервис или выходной')
+    const updatedCarSchedule = await CarWorkSchedule.findByPk(id)
+    await updatedCarSchedule.update(args)
+    pubsub.publish('updatedCarWorkSchedule', { updatedCarWorkSchedule: updatedCarSchedule })
+    return updatedCarSchedule
   } catch (e) {
     throw new Error('Ошибка обновления записи CarWorkSchedule')
   }
