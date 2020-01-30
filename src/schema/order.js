@@ -57,6 +57,8 @@ extend type Mutation {
     shippingTime: String, 
     deliveryDate: String, 
     deliveryTime: String,
+    isDriverNotified:Boolean,
+    isClientNotified: Boolean
     lengthCell: Int
     ): Order
   updateOrder (

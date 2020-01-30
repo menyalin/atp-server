@@ -37,7 +37,9 @@ export const cars = async (_, { type }, { models: { Car } }) => {
 }
 export const carsForVuex = async (_, args, { models: { Car } }) => {
   try {
-    const res = Car.findAll()
+    const res = Car.findAll({
+      order: ['listItem']
+    })
     return res
   } catch (e) {
     throw new Error('Ошибка поиска в таблице "Cars"')
