@@ -47,7 +47,6 @@ export const orderPage = async (_, { offset, limit }, { models: { Order, Address
 }
 export const updateOrder = async (_, args, { models: { Order, CarWorkSchedule } }) => {
   const { id } = args
-  console.log(args)
   delete args.id
   args.dateRange = parseDateRange(args.dateRange)
   if (!!args.carId) {
@@ -56,8 +55,6 @@ export const updateOrder = async (_, args, { models: { Order, CarWorkSchedule } 
   }
   const updatedOrder = await Order.findByPk(id)
   await updatedOrder.update(args)
-  console.log('-------------------')
-  console.log(updatedOrder)
   pubsub.publish('orderUpdated', { orderUpdated: updatedOrder })
   return updatedOrder
 }
