@@ -22,6 +22,7 @@ type Order {
   car: Car
   templateName: String
   showInMenu: Boolean
+  lengthCell: Int
 }
 
 type OrderPage {
