@@ -20,6 +20,7 @@ type Order {
   isClientNotified: Boolean
   carId: String
   car: Car
+  templateId: String
   templateName: String
   showInMenu: Boolean
   lengthCell: Int
@@ -61,6 +62,7 @@ extend type Mutation {
     isDriverNotified:Boolean,
     isClientNotified: Boolean
     lengthCell: Int
+    templateId: String
     ): Order
   updateOrder (
     id: ID!
@@ -77,6 +79,7 @@ extend type Mutation {
     deliveryTime: String
     isDriverNotified: Boolean
     isClientNotified: Boolean
+    templateId: String
     lengthCell: Int
     ): Order
 }

@@ -47,6 +47,9 @@ Order.init({
   },
   lengthCell: {
     type: Sequelize.INTEGER
+  },
+  templateId: {
+    type: Sequelize.TEXT
   }
 }, {
   sequelize,
