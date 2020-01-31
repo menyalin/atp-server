@@ -88,7 +88,8 @@ OrderTemplate.init({
     type: Sequelize.STRING(60)
   },
   lengthCell: {
-    type: Sequelize.INTEGER
+    type: Sequelize.INTEGER,
+    defaultValue: 1
   }
 }, {
   sequelize,
