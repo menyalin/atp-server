@@ -87,3 +87,13 @@ export const updateTemplate = async (_, args, { models: { OrderTemplate } }) => 
   pubsub.publish('orderTemplateUpdated', { orderTemplateUpdated: updatedTemplate })
   return updatedTemplate
 }
+export const deleteOrderTemplate = async (_, { id }, { models: { OrderTemplate } }) => {
+  try {
+    const item = await OrderTemplate.findByPk(id)
+    await item.destroy()
+    pubsub.publish('orderTemplateDeleted', { orderTemplateDeleted: id })
+    return true
+  } catch (e) {
+    throw new Error('Ошибка удаления OrderTemplate')
+  }
+}

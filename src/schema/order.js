@@ -41,12 +41,14 @@ extend type Subscription {
   orderAdded: Order
   orderUpdated: Order
   orderTemplateUpdated: Order
+  orderTemplateDeleted: ID
 }
 
 
 extend type Mutation {
   createOrderTemplate (carType: String!, shipperId: String, consigneeId: String, status: String, note: String, templateName: String, lengthCell:Int! ): Order
   updateTemplate (id: ID!, carType: String!, shipperId: String, consigneeId: String, status: String, note: String, templateName: String, showInMenu: Boolean, lengthCell:Int!): Order
+  deleteOrderTemplate(id: ID!): Boolean
   createOrder(
     carType: String!, 
     dateRange: String!,

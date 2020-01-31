@@ -1,6 +1,6 @@
 import {
   orders, createOrder, orderPage, updateOrder, ordersForVuex, updateTemplate,
-  orderTemplates, createOrderTemplate
+  orderTemplates, createOrderTemplate, deleteOrderTemplate
 } from '../controllers/order'
 import { pubsub } from '../pubsub'
 
@@ -15,7 +15,8 @@ export default {
     createOrder,
     updateOrder,
     createOrderTemplate,
-    updateTemplate
+    updateTemplate,
+    deleteOrderTemplate
   },
   Subscription: {
     orderAdded: {
@@ -26,6 +27,9 @@ export default {
     },
     orderTemplateUpdated: {
       subscribe: () => pubsub.asyncIterator(['orderTemplateUpdated'])
+    },
+    orderTemplateDeleted: {
+      subscribe: () => pubsub.asyncIterator(['orderTemplateDeleted'])
     }
   }
 }
