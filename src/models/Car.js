@@ -6,12 +6,10 @@ Car.init({
     type: Sequelize.UUID,
     primaryKey: true,
     defaultValue: Sequelize.UUIDV4,
-    unique: true
   },
   title: {
     type: Sequelize.TEXT,
-    allowNull: false,
-    unique: true
+    allowNull: false
   },
   listItem: {
     type: Sequelize.INTEGER,
