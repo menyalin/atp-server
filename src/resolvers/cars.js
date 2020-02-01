@@ -1,6 +1,6 @@
 import {
-  carPage, createCar, cars, filteredCars, carById, carsForVuex, createCarWorkSchedule, carWorkScheduleForVuex,
-  updateCarWorkSchedule, deleteCarWorkSchedule
+  carsForVuex, createCar, updateCar,
+  createCarWorkSchedule, carWorkScheduleForVuex, updateCarWorkSchedule, deleteCarWorkSchedule
 } from '../controllers/cars'
 import { pubsub } from '../pubsub'
 
@@ -11,6 +11,7 @@ export default {
   },
   Mutation: {
     createCar,
+    updateCar,
     createCarWorkSchedule,
     updateCarWorkSchedule,
     deleteCarWorkSchedule

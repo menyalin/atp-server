@@ -50,7 +50,8 @@ extend type Subscription {
   carUpdated: Car
 }
 extend type Mutation {
-  createCar (title: String!, isOwned: Boolean, type: String!, maxPltCount: Int, note: String, reg: String, pts: String, listItem: Int, regNumber: String): Car
+  createCar (title: String!, isOwned: Boolean, type: String!, maxPltCount: Int, note: String, reg: String, pts: String, listItem: Int, regNumber: String, isActive:Boolean): Car
+  updateCar (id: ID! title: String!, isOwned: Boolean, type: String!, maxPltCount: Int, note: String, reg: String, pts: String, listItem: Int, regNumber: String isActive:Boolean): Car
 
   createCarWorkSchedule(carId: String!, type: CarWorkScheduleType!, dateRange: String!, note: String, title: String): CarWorkSchedule
   updateCarWorkSchedule(id: ID!, carId: String!, type: CarWorkScheduleType!, dateRange: String!, note: String, title: String): CarWorkSchedule
