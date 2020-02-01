@@ -26,13 +26,13 @@ Order.init({
     type: Sequelize.RANGE(Sequelize.DATE)
   },
   shippingDate: {
-    type: Sequelize.DATE
+    type: Sequelize.DATEONLY
   },
   shippingTime: {
     type: Sequelize.STRING(10)
   },
   deliveryDate: {
-    type: Sequelize.DATE
+    type: Sequelize.DATEONLY
   },
   deliveryTime: {
     type: Sequelize.STRING(10)
