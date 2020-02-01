@@ -16,6 +16,7 @@ type Car {
   id: ID
   title: String
   listItem: Int
+  regNumber: String
   reg: String
   pts: String
   isTempSlot: Boolean
@@ -46,9 +47,11 @@ extend type Query {
 extend type Subscription {
   updatedCarWorkSchedule: CarWorkSchedule
   deletedCarWorkSchedule: String
+  carUpdated: Car
 }
 extend type Mutation {
-  createCar (title: String!, isOwned: Boolean!, type: String!, maxPltCount: Int, note: String, reg: String, pts: String, listItem: Int): Car
+  createCar (title: String!, isOwned: Boolean, type: String!, maxPltCount: Int, note: String, reg: String, pts: String, listItem: Int, regNumber: String): Car
+
   createCarWorkSchedule(carId: String!, type: CarWorkScheduleType!, dateRange: String!, note: String, title: String): CarWorkSchedule
   updateCarWorkSchedule(id: ID!, carId: String!, type: CarWorkScheduleType!, dateRange: String!, note: String, title: String): CarWorkSchedule
   deleteCarWorkSchedule(id: ID!): Boolean 

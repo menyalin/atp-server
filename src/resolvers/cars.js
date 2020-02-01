@@ -21,6 +21,9 @@ export default {
     },
     deletedCarWorkSchedule: {
       subscribe: () => pubsub.asyncIterator('deletedCarWorkSchedule')
+    },
+    carUpdated: {
+      subscribe: () => pubsub.asyncIterator('carUpdated')
     }
   }
 }

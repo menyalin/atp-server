@@ -2,14 +2,6 @@ import { Op } from 'sequelize'
 import { pubsub } from '../pubsub'
 import { parseDateRange, searchCross } from '../utils'
 
-export const createCar = async (_, args, { models: { Car } }) => {
-  try {
-    const data = await Car.create(args)
-    return data
-  } catch (e) {
-    throw new Error('Ошибка создания записи Car')
-  }
-}
 export const carsForVuex = async (_, args, { models: { Car } }) => {
   try {
     const res = Car.findAll({
@@ -18,6 +10,27 @@ export const carsForVuex = async (_, args, { models: { Car } }) => {
     return res
   } catch (e) {
     throw new Error('Ошибка поиска в таблице "Cars"')
+  }
+}
+export const createCar = async (_, args, { models: { Car } }) => {
+  try {
+    const data = await Car.create(args)
+    pubsub.publish('carUpdated', { carUpdated: data })
+    return data
+  } catch (e) {
+    throw new Error('Ошибка создания записи Car')
+  }
+}
+export const updateCar = async (_, args, { models: { Car } }) => {
+  try {
+    const { id } = args
+    delete args.id
+    const car = await Car.findByPk(id)
+    await car.update(args)
+    pubsub.publish('carUpdated', { carUpdated: car })
+    return car
+  } catch (e) {
+    throw new Error('Ошибка обновления записи Car')
   }
 }
 export const createCarWorkSchedule = async (_, args, { models: { CarWorkSchedule, Order } }) => {
