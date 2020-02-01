@@ -6,10 +6,6 @@ import { pubsub } from '../pubsub'
 
 export default {
   Query: {
-    carPage,
-    cars,
-    filteredCars,
-    carById,
     carsForVuex,
     carWorkScheduleForVuex
   },

@@ -37,17 +37,9 @@ type CarWorkSchedule {
   note: String
 }
 
-type CarPage {
-  cars: [Car]
-  totalCar: Int
-}
 
 extend type Query {
-  carPage (offset: Int!, limit: Int!): CarPage
-  cars(type: String): [Car]
   carsForVuex: [Car]
-  filteredCars(filter: String): [Car]
-  carById(id: ID): Car
   carWorkScheduleForVuex: [CarWorkSchedule]
 }
 
