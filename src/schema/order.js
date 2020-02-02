@@ -24,6 +24,7 @@ type Order {
   templateName: String
   showInMenu: Boolean
   lengthCell: Int
+  attention: Boolean
 }
 
 type OrderPage {
@@ -65,6 +66,7 @@ extend type Mutation {
     isClientNotified: Boolean
     lengthCell: Int
     templateId: String
+    attention: Boolean
     ): Order
   updateOrder (
     id: ID!
@@ -83,6 +85,7 @@ extend type Mutation {
     isClientNotified: Boolean
     templateId: String
     lengthCell: Int
+    attention: Boolean
     ): Order
 }
 

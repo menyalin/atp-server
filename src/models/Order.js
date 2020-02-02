@@ -17,7 +17,8 @@ Order.init({
     allowNull: false
   },
   status: {
-    type: Sequelize.STRING(40)
+    type: Sequelize.STRING(40),
+    defaultValue: '10'
   },
   note: {
     type: Sequelize.TEXT
@@ -47,6 +48,10 @@ Order.init({
   },
   lengthCell: {
     type: Sequelize.INTEGER
+  },
+  attention: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   },
   templateId: {
     type: Sequelize.TEXT

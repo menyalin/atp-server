@@ -1,6 +1,6 @@
 import { Op } from 'sequelize'
 import { pubsub } from '../pubsub'
-import { parseDateRange, searchCross } from '../utils'
+import { parseDateRange, searchCross, searchCrossExistOrder } from '../utils'
 
 export const carsForVuex = async (_, args, { models: { Car } }) => {
   try {
@@ -51,7 +51,7 @@ export const updateCarWorkSchedule = async (_, args, { models: { CarWorkSchedule
     delete args.id
     args.dateRange = parseDateRange(args.dateRange)
     if (await searchCross(args.carId, args.dateRange, Order)) throw new Error('Пересечение с рейсом!')
-    if (await searchCross(args.carId, args.dateRange, CarWorkSchedule)) throw new Error('Пересечение! Транспортное средство недоступно. Сервис или выходной')
+    if (await searchCrossExistOrder(args.carId, args.dateRange, CarWorkSchedule, id)) throw new Error('Пересечение! Транспортное средство недоступно. Сервис или выходной')
     const updatedCarSchedule = await CarWorkSchedule.findByPk(id)
     await updatedCarSchedule.update(args)
     pubsub.publish('updatedCarWorkSchedule', { updatedCarWorkSchedule: updatedCarSchedule })
