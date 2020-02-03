@@ -1,4 +1,16 @@
+import { Journal } from '../models/journal'
 import { Op } from 'sequelize'
+
+export const logOperation = (documentType, documentId, operationType, document, userId) => {
+  Journal.create({
+    documentType,
+    operationType,
+    documentId,
+    document,
+    userId
+  })
+}
+
 
 export const parseDateRange = (dateRange) => {
   const regExp = /^\[(2[\d\s-:\+]+),(2[\d\s-:\+]+)[\]|\)]$/

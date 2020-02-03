@@ -1,6 +1,6 @@
 import { Op } from 'sequelize'
 import { pubsub } from '../pubsub'
-import { parseDateRange, searchCross, searchCrossExistOrder } from '../utils'
+import { parseDateRange, searchCross, searchCrossExistOrder, logOperation } from '../utils'
 
 export const orders = async (_, args, { models: { Order, Address } }) => {
   const data = await Order.findAll({
@@ -11,7 +11,7 @@ export const orders = async (_, args, { models: { Order, Address } }) => {
   })
   return data
 }
-export const createOrder = async (_, args, { models: { Order, CarWorkSchedule } }) => {
+export const createOrder = async (_, args, { models: { Order, CarWorkSchedule }, me }) => {
   try {
     args.dateRange = parseDateRange(args.dateRange)
     if (!!args.carId) {
@@ -20,6 +20,7 @@ export const createOrder = async (_, args, { models: { Order, CarWorkSchedule } 
     }
     const newOrder = await Order.create(args)
     pubsub.publish('orderAdded', { orderAdded: newOrder })
+    logOperation('order', newOrder.id, 'create', newOrder, me.id)
     return newOrder
   } catch (e) {
     throw new Error(e)
@@ -45,7 +46,7 @@ export const orderPage = async (_, { offset, limit }, { models: { Order, Address
     throw new Error('Ошибка OrderPage: ', e.message)
   }
 }
-export const updateOrder = async (_, args, { models: { Order, CarWorkSchedule } }) => {
+export const updateOrder = async (_, args, { models: { Order, CarWorkSchedule, Journal }, me }) => {
   const { id } = args
   delete args.id
   args.dateRange = parseDateRange(args.dateRange)
@@ -56,6 +57,7 @@ export const updateOrder = async (_, args, { models: { Order, CarWorkSchedule } 
   const updatedOrder = await Order.findByPk(id)
   await updatedOrder.update(args)
   pubsub.publish('orderUpdated', { orderUpdated: updatedOrder })
+  logOperation('order', id, 'update', updatedOrder, me.id)
   return updatedOrder
 }
 export const ordersForVuex = async (_, { startDate, endDate }, { models: { Order } }) => {

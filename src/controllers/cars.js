@@ -1,6 +1,6 @@
 import { Op } from 'sequelize'
 import { pubsub } from '../pubsub'
-import { parseDateRange, searchCross, searchCrossExistOrder } from '../utils'
+import { parseDateRange, searchCross, searchCrossExistOrder, logOperation } from '../utils'
 
 export const carsForVuex = async (_, args, { models: { Car } }) => {
   try {
@@ -12,10 +12,11 @@ export const carsForVuex = async (_, args, { models: { Car } }) => {
     throw new Error('Ошибка поиска в таблице "Cars"')
   }
 }
-export const createCar = async (_, args, { models: { Car } }) => {
+export const createCar = async (_, args, { models: { Car }, me }) => {
   try {
     const data = await Car.create(args)
     pubsub.publish('carUpdated', { carUpdated: data })
+    logOperation('car', data.id, 'create', data, me.id)
     return data
   } catch (e) {
     throw new Error('Ошибка создания записи Car')
@@ -28,6 +29,7 @@ export const updateCar = async (_, args, { models: { Car } }) => {
     const car = await Car.findByPk(id)
     await car.update(args)
     pubsub.publish('carUpdated', { carUpdated: car })
+    logOperation('car', id, 'update', car, me.id)
     return car
   } catch (e) {
     throw new Error('Ошибка обновления записи Car')
