@@ -19,6 +19,9 @@ Car.init({
     type: Sequelize.BOOLEAN,
     defaultValue: false
   },
+  owner: {
+    type: Sequelize.TEXT
+  },
   reg: {
     type: Sequelize.TEXT
   },

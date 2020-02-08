@@ -22,7 +22,7 @@ export const createCar = async (_, args, { models: { Car }, me }) => {
     throw new Error('Ошибка создания записи Car')
   }
 }
-export const updateCar = async (_, args, { models: { Car } }) => {
+export const updateCar = async (_, args, { models: { Car }, me }) => {
   try {
     const { id } = args
     delete args.id
