@@ -2,6 +2,7 @@ import { User, UserRole, Schedule } from './User'
 import { Address } from './Address'
 import { Car, CarWorkSchedule } from './Car'
 import { Order, OrderTemplate } from './Order'
+import { Driver } from './Driver'
 
 
 export default {
@@ -12,5 +13,6 @@ export default {
   Address,
   Car,
   CarWorkSchedule,
-  Order
+  Order,
+  Driver
 }
