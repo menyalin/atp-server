@@ -38,6 +38,16 @@ type CarWorkSchedule {
   title: String
   note: String
 }
+type CarUnit {
+  id: ID
+  startDate: String
+  truckId: String
+  trailerId: String
+  driverId1: String
+  driverId2: String
+  isActive: Boolean
+  note: String
+}
 
 
 extend type Query {
@@ -49,6 +59,8 @@ extend type Subscription {
   updatedCarWorkSchedule: CarWorkSchedule
   deletedCarWorkSchedule: String
   carUpdated: Car
+
+  carUnitUpdated: CarUnit
 }
 extend type Mutation {
   createCar (title: String!, owner: String, isOwned: Boolean, type: String!, maxPltCount: Int, note: String, reg: String, pts: String, listItem: Int, regNumber: String, isActive:Boolean): Car
@@ -56,6 +68,8 @@ extend type Mutation {
 
   createCarWorkSchedule(carId: String!, type: CarWorkScheduleType!, dateRange: String!, note: String, title: String): CarWorkSchedule
   updateCarWorkSchedule(id: ID!, carId: String!, type: CarWorkScheduleType!, dateRange: String!, note: String, title: String): CarWorkSchedule
-  deleteCarWorkSchedule(id: ID!): Boolean 
+  deleteCarWorkSchedule(id: ID!): Boolean
+  
+  createCarUnit(startDate: String! truckId: String! trailerId: String driverId1:String! driverId2:String note:String): CarUnit
 }
 `

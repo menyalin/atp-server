@@ -1,6 +1,7 @@
 import {
   carsForVuex, createCar, updateCar,
-  createCarWorkSchedule, carWorkScheduleForVuex, updateCarWorkSchedule, deleteCarWorkSchedule
+  createCarWorkSchedule, carWorkScheduleForVuex, updateCarWorkSchedule, deleteCarWorkSchedule,
+  createCarUnit
 } from '../controllers/cars'
 import { pubsub } from '../pubsub'
 
@@ -14,7 +15,8 @@ export default {
     updateCar,
     createCarWorkSchedule,
     updateCarWorkSchedule,
-    deleteCarWorkSchedule
+    deleteCarWorkSchedule,
+    createCarUnit
   },
   Subscription: {
     updatedCarWorkSchedule: {
@@ -25,6 +27,9 @@ export default {
     },
     carUpdated: {
       subscribe: () => pubsub.asyncIterator('carUpdated')
+    },
+    carUnitUpdated: {
+      subscribe: () => pubsub.asyncIterator('carUnitUpdated')
     }
   }
 }

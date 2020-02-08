@@ -11,6 +11,9 @@ export const logOperation = (documentType, documentId, operationType, document, 
   })
 }
 
+export const parseDate = (date) => {
+  return new Date(date)
+}
 
 export const parseDateRange = (dateRange) => {
   const regExp = /^\[(2[\d\s-:\+]+),(2[\d\s-:\+]+)[\]|\)]$/

@@ -48,8 +48,8 @@ Car.init({
   sequelize,
   modelName: 'car'
 })
-export class CarWorkSchedule extends Model { }
 
+export class CarWorkSchedule extends Model { }
 CarWorkSchedule.init({
   type: {
     type: Sequelize.ENUM('service', 'holiday')
@@ -68,7 +68,45 @@ CarWorkSchedule.init({
   modelName: 'carWorkSchedule'
 })
 
+export class CarUnit extends Model { }
+CarUnit.init({
+  id: {
+    type: Sequelize.UUID,
+    primaryKey: true,
+    defaultValue: Sequelize.UUIDV4,
+  },
+  startDate: {
+    type: Sequelize.DATE,
+    unique: 'carUnit'
+  },
+  truckId: {
+    type: Sequelize.UUID,
+    unique: 'carUnit'
+  },
+  trailerId: {
+    type: Sequelize.UUID
+  },
+  driverId1: {
+    type: Sequelize.UUID,
+    allowNull: false
+  },
+  driverId2: {
+    type: Sequelize.UUID
+  },
+  isActive: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true
+  },
+  note: {
+    type: Sequelize.STRING
+  }
+}, {
+  sequelize,
+  modelName: 'carUnit'
+})
+
 CarWorkSchedule.belongsTo(Car, { as: 'car', constraints: false })
 
 Car.sync()
-CarWorkSchedule.sync({ force: false })
+CarWorkSchedule.sync()
+CarUnit.sync({ force: true })

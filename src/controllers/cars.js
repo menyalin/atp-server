@@ -1,6 +1,6 @@
 import { Op } from 'sequelize'
 import { pubsub } from '../pubsub'
-import { parseDateRange, searchCross, searchCrossExistOrder, logOperation } from '../utils'
+import { parseDateRange, parseDate, searchCross, searchCrossExistOrder, logOperation } from '../utils'
 
 export const carsForVuex = async (_, args, { models: { Car } }) => {
   try {
@@ -82,5 +82,16 @@ export const deleteCarWorkSchedule = async (_, { id }, { models: { CarWorkSchedu
     return true
   } catch (e) {
     throw new Error('Ошибка удаления записи')
+  }
+}
+
+export const createCarUnit = async (_, args, { models: { CarUnit }, me }) => {
+  try {
+    const data = await CarUnit.create(args)
+    pubsub.publish('carUnitUpdated', { carUnitUpdated: data })
+    // logOperation('carUnit', data.id, 'create', data, me.id)
+    return data
+  } catch (e) {
+    throw new Error('Ошибка создания CarUnit')
   }
 }
