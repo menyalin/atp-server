@@ -49,12 +49,17 @@ type CarUnit {
   note: String
 }
 
+type CarUnitPage {
+  carUnits: [CarUnit]
+  count: Int
+}
 
 extend type Query {
   carsForVuex: [Car]
   carWorkScheduleForVuex: [CarWorkSchedule]
 
   carUnit(date:String! truckId: String!): CarUnit
+  carUnitsPage(offset: Int, limit: Int): CarUnitPage
 }
 
 extend type Subscription {

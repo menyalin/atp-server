@@ -116,5 +116,5 @@ OrderTemplate.init({
 Order.belongsTo(Address, { as: 'shipper', constraints: false })
 Order.belongsTo(Address, { as: 'consignee', constraints: false })
 Order.belongsTo(Car, { as: 'car', constraints: false })
-Order.sync({ force: true })
+Order.sync()
 OrderTemplate.sync()

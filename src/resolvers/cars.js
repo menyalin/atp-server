@@ -1,7 +1,7 @@
 import {
   carsForVuex, createCar, updateCar,
   createCarWorkSchedule, carWorkScheduleForVuex, updateCarWorkSchedule, deleteCarWorkSchedule,
-  createCarUnit, carUnit
+  createCarUnit, carUnit, carUnitsPage
 } from '../controllers/cars'
 import { pubsub } from '../pubsub'
 
@@ -10,7 +10,8 @@ export default {
     carsForVuex,
     carWorkScheduleForVuex,
 
-    carUnit
+    carUnit,
+    carUnitsPage
   },
   Mutation: {
     createCar,

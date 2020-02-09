@@ -110,7 +110,7 @@ export const createCarUnit = async (_, args, { models: { CarUnit }, me }) => {
   try {
     const data = await CarUnit.create(args)
     pubsub.publish('carUnitUpdated', { carUnitUpdated: data })
-    // logOperation('carUnit', data.id, 'create', data, me.id)
+    logOperation('carUnit', data.id, 'create', data, me.id)
     return data
   } catch (e) {
     throw new Error('Ошибка создания CarUnit')
@@ -122,5 +122,21 @@ export const carUnit = async (_, { date, truckId }, { models: { CarUnit } }) => 
     return carUnit
   } catch (e) {
     throw new Error('Ошибка запроса CarUnit', e.message)
+  }
+}
+export const carUnitsPage = async (_, { limit, offset }, { models: { CarUnit } }) => {
+  try {
+    const res = await CarUnit.findAndCountAll({
+      offset,
+      limit,
+      // order: ['createdAt', "DESC"]
+    })
+    return {
+      carUnits: res.rows,
+      count: res.count
+    }
+
+  } catch (e) {
+    throw new Error('Ошибка запроса carUnitsPage', e.message)
   }
 }
