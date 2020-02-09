@@ -1,6 +1,6 @@
 import {
-  orders, createOrder, orderPage, updateOrder, ordersForVuex, updateTemplate,
-  orderTemplates, createOrderTemplate, deleteOrderTemplate
+  orders, createOrder, orderPage, updateOrder, ordersForVuex, confirmOrder,
+  updateTemplate, orderTemplates, createOrderTemplate, deleteOrderTemplate
 } from '../controllers/order'
 import { pubsub } from '../pubsub'
 
@@ -14,6 +14,7 @@ export default {
   Mutation: {
     createOrder,
     updateOrder,
+    confirmOrder,
     createOrderTemplate,
     updateTemplate,
     deleteOrderTemplate

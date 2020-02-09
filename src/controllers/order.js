@@ -1,5 +1,6 @@
 import { Op } from 'sequelize'
 import { pubsub } from '../pubsub'
+import { getCarUnitFields } from './cars'
 import { parseDateRange, searchCross, searchCrossExistOrder, logOperation } from '../utils'
 
 export const orders = async (_, args, { models: { Order, Address } }) => {
@@ -46,7 +47,7 @@ export const orderPage = async (_, { offset, limit }, { models: { Order, Address
     throw new Error('Ошибка OrderPage: ', e.message)
   }
 }
-export const updateOrder = async (_, args, { models: { Order, CarWorkSchedule, Journal }, me }) => {
+export const updateOrder = async (_, args, { models: { Order, CarWorkSchedule }, me }) => {
   const { id } = args
   delete args.id
   args.dateRange = parseDateRange(args.dateRange)
@@ -60,6 +61,25 @@ export const updateOrder = async (_, args, { models: { Order, CarWorkSchedule, J
   logOperation('order', id, 'update', updatedOrder, me.id)
   return updatedOrder
 }
+export const confirmOrder = async (_, { id, carType, carId, dateRange }, { models: { Order, CarWorkSchedule }, me }) => {
+  dateRange = parseDateRange(dateRange)
+  if (!!carId) {
+    if (await searchCrossExistOrder(carId, dateRange, Order, id)) throw new Error('Пересечение с другими рейсами')
+    if (await searchCross(carId, dateRange, CarWorkSchedule)) throw new Error('Транспортное средство недоступно. Сервис или выходной')
+  }
+  const updatedOrder = await Order.findByPk(id)
+  const carUnitFields = await getCarUnitFields(carId, dateRange[0].value)
+  await updatedOrder.update({
+    carType,
+    carId,
+    dateRange,
+    ...carUnitFields
+  })
+  pubsub.publish('orderUpdated', { orderUpdated: updatedOrder })
+  logOperation('order', id, 'confirm', updatedOrder, me.id)
+  return updatedOrder
+}
+
 export const ordersForVuex = async (_, { startDate, endDate }, { models: { Order } }) => {
   try {
     const res = await Order.findAll()

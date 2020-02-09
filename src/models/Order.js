@@ -55,6 +55,15 @@ Order.init({
   },
   templateId: {
     type: Sequelize.TEXT
+  },
+  driverId1: {
+    type: Sequelize.TEXT
+  },
+  driverId2: {
+    type: Sequelize.TEXT
+  },
+  trailerId: {
+    type: Sequelize.TEXT
   }
 }, {
   sequelize,
@@ -107,5 +116,5 @@ OrderTemplate.init({
 Order.belongsTo(Address, { as: 'shipper', constraints: false })
 Order.belongsTo(Address, { as: 'consignee', constraints: false })
 Order.belongsTo(Car, { as: 'car', constraints: false })
-Order.sync()
+Order.sync({ force: true })
 OrderTemplate.sync()

@@ -1,6 +1,27 @@
 import { Op } from 'sequelize'
 import { pubsub } from '../pubsub'
-import { parseDateRange, parseDate, searchCross, searchCrossExistOrder, logOperation } from '../utils'
+import { CarUnit } from '../models/Car'
+import { parseDateRange, searchCross, searchCrossExistOrder, logOperation } from '../utils'
+
+export const getCarUnitFields = async (truckId, date) => {
+  const carUnit = await CarUnit.findOne({
+    where: {
+      isActive: true,
+      startDate: {
+        [Op.lte]: date
+      },
+      truckId: truckId
+    },
+    order: [['startDate', 'DESC']]
+  })
+  let carUnitFields = {}
+  if (!!carUnit) {
+    carUnitFields.driverId1 = carUnit.driverId1
+    carUnitFields.driverId2 = carUnit.driverId2
+    carUnitFields.trailerId = carUnit.trailerId
+  }
+  return carUnitFields
+}
 
 export const carsForVuex = async (_, args, { models: { Car } }) => {
   try {
@@ -97,15 +118,7 @@ export const createCarUnit = async (_, args, { models: { CarUnit }, me }) => {
 }
 export const carUnit = async (_, { date, truckId }, { models: { CarUnit } }) => {
   try {
-    const carUnit = await CarUnit.findOne({
-      where: {
-        startDate: {
-          [Op.lte]: date
-        },
-        truckId: truckId
-      },
-      order: [['startDate', 'DESC']]
-    })
+    const carUnit = await getCarUnitFields(truckId, date)
     return carUnit
   } catch (e) {
     throw new Error('Ошибка запроса CarUnit', e.message)

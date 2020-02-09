@@ -25,6 +25,9 @@ type Order {
   showInMenu: Boolean
   lengthCell: Int
   attention: Boolean
+  driverId1: String
+  driverId2: String
+  trailerId: String
 }
 
 type OrderPage {
@@ -67,6 +70,9 @@ extend type Mutation {
     lengthCell: Int
     templateId: String
     attention: Boolean
+    driverId1: String
+    driverId2: String
+    trailerId: String
     ): Order
   updateOrder (
     id: ID!
@@ -86,7 +92,11 @@ extend type Mutation {
     templateId: String
     lengthCell: Int
     attention: Boolean
+    driverId1: String
+    driverId2: String
+    trailerId: String
     ): Order
+    confirmOrder (id: ID! carType: String! dateRange: String! carId: String ): Order
 }
 
 `
