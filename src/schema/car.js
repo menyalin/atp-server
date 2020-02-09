@@ -53,6 +53,8 @@ type CarUnit {
 extend type Query {
   carsForVuex: [Car]
   carWorkScheduleForVuex: [CarWorkSchedule]
+
+  carUnit(date:String! truckId: String!): CarUnit
 }
 
 extend type Subscription {

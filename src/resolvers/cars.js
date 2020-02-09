@@ -1,14 +1,16 @@
 import {
   carsForVuex, createCar, updateCar,
   createCarWorkSchedule, carWorkScheduleForVuex, updateCarWorkSchedule, deleteCarWorkSchedule,
-  createCarUnit
+  createCarUnit, carUnit
 } from '../controllers/cars'
 import { pubsub } from '../pubsub'
 
 export default {
   Query: {
     carsForVuex,
-    carWorkScheduleForVuex
+    carWorkScheduleForVuex,
+
+    carUnit
   },
   Mutation: {
     createCar,

@@ -95,3 +95,19 @@ export const createCarUnit = async (_, args, { models: { CarUnit }, me }) => {
     throw new Error('Ошибка создания CarUnit')
   }
 }
+export const carUnit = async (_, { date, truckId }, { models: { CarUnit } }) => {
+  try {
+    const carUnit = await CarUnit.findOne({
+      where: {
+        startDate: {
+          [Op.lte]: date
+        },
+        truckId: truckId
+      },
+      order: [['startDate', 'DESC']]
+    })
+    return carUnit
+  } catch (e) {
+    throw new Error('Ошибка запроса CarUnit', e.message)
+  }
+}

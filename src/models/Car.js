@@ -109,4 +109,4 @@ CarWorkSchedule.belongsTo(Car, { as: 'car', constraints: false })
 
 Car.sync()
 CarWorkSchedule.sync()
-CarUnit.sync({ force: true })
+CarUnit.sync()
