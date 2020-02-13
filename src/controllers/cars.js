@@ -1,7 +1,7 @@
 import { Op } from 'sequelize'
 import { pubsub } from '../pubsub'
 import { CarUnit } from '../models/Car'
-import { parseDateRange, searchCross, searchCrossExistOrder, logOperation } from '../utils'
+import { parseDateRange, searchCross, searchCrossExistOrder, logOperation, datePreparation } from '../utils'
 
 export const getCarUnitFields = async (truckId, date) => {
   const carUnit = await CarUnit.findOne({
@@ -116,6 +116,23 @@ export const createCarUnit = async (_, args, { models: { CarUnit }, me }) => {
     throw new Error('Ошибка создания CarUnit')
   }
 }
+export const updateCarUnit = async (_, args, { models: { CarUnit }, me }) => {
+  try {
+    const { id } = args
+    delete args.id
+    args.startDate = datePreparation(args.startDate)
+    const carUnit = await CarUnit.findByPk(id)
+    await carUnit.update(args)
+    pubsub.publish('carUnitUpdated', { carUnitUpdated: carUnit })
+    logOperation('carUnit', id, 'update', carUnit, me.id)
+    return carUnit
+  } catch (e) {
+    console.log(e)
+    throw new Error('Ошибка обновления CarUnit', e.message)
+  }
+}
+
+
 export const carUnit = async (_, { date, truckId }, { models: { CarUnit } }) => {
   try {
     const carUnit = await getCarUnitFields(truckId, date)
@@ -129,7 +146,7 @@ export const carUnitsPage = async (_, { limit, offset }, { models: { CarUnit } }
     const res = await CarUnit.findAndCountAll({
       offset,
       limit,
-      // order: ['createdAt', "DESC"]
+      order: [['createdAt', "DESC"]]
     })
     return {
       carUnits: res.rows,

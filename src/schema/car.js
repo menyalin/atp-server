@@ -78,5 +78,6 @@ extend type Mutation {
   deleteCarWorkSchedule(id: ID!): Boolean
   
   createCarUnit(startDate: String! truckId: String! trailerId: String driverId1:String! driverId2:String note:String): CarUnit
+  updateCarUnit(id: ID! startDate: String! truckId: String! trailerId: String driverId1:String! driverId2:String note:String): CarUnit
 }
 `

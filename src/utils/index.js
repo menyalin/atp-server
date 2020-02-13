@@ -1,5 +1,6 @@
 import { Journal } from '../models/journal'
 import { Op } from 'sequelize'
+import moment from 'moment'
 
 export const logOperation = (documentType, documentId, operationType, document, userId) => {
   Journal.create({
@@ -9,6 +10,13 @@ export const logOperation = (documentType, documentId, operationType, document, 
     document,
     userId
   })
+}
+export const datePreparation = (date) => {
+  const format = 'YYYY-MM-DD HH:mm'
+  const dateMoment = moment(+date)
+  if (dateMoment._isValid) {
+    return dateMoment.format(format)
+  } else return date
 }
 
 export const parseDateRange = (dateRange) => {
