@@ -131,7 +131,18 @@ export const updateCarUnit = async (_, args, { models: { CarUnit }, me }) => {
     throw new Error('Ошибка обновления CarUnit', e.message)
   }
 }
-
+export const deleteCarUnit = async (_, { id }, { models: { CarUnit }, me }) => {
+  try {
+    const carUnit = await CarUnit.findByPk(id)
+    carUnit.isActive = false
+    await carUnit.save()
+    logOperation('carUnit', id, 'delete', carUnit, me.id)
+    return id
+  } catch (e) {
+    console.log(e)
+    throw new Error('Ошибка обновления CarUnit', e.message)
+  }
+}
 
 export const carUnit = async (_, { date, truckId }, { models: { CarUnit } }) => {
   try {
@@ -146,6 +157,9 @@ export const carUnitsPage = async (_, { limit, offset }, { models: { CarUnit } }
     const res = await CarUnit.findAndCountAll({
       offset,
       limit,
+      where: {
+        isActive: true
+      },
       order: [['createdAt', "DESC"]]
     })
     return {
