@@ -22,7 +22,6 @@ export const getCarUnitFields = async (truckId, date) => {
   }
   return carUnitFields
 }
-
 export const carsForVuex = async (_, args, { models: { Car } }) => {
   try {
     const res = Car.findAll({
@@ -122,6 +121,7 @@ export const updateCarUnit = async (_, args, { models: { CarUnit }, me }) => {
     delete args.id
     args.startDate = datePreparation(args.startDate)
     const carUnit = await CarUnit.findByPk(id)
+    console.log(args)
     await carUnit.update(args)
     pubsub.publish('carUnitUpdated', { carUnitUpdated: carUnit })
     logOperation('carUnit', id, 'update', carUnit, me.id)
