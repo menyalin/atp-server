@@ -13,10 +13,12 @@ export const logOperation = (documentType, documentId, operationType, document, 
 }
 export const datePreparation = (date) => {
   const format = 'YYYY-MM-DD HH:mm'
-  const dateMoment = moment(+date)
-  if (dateMoment._isValid) {
-    return dateMoment.format(format)
-  } else return date
+  if (date) {
+    const dateMoment = moment(+date)
+    if (dateMoment._isValid) {
+      return dateMoment.format(format)
+    } else return date
+  } else null
 }
 
 export const parseDateRange = (dateRange) => {

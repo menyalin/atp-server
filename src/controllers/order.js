@@ -1,7 +1,7 @@
 import { Op } from 'sequelize'
 import { pubsub } from '../pubsub'
 import { getCarUnitFields } from './cars'
-import { parseDateRange, searchCross, searchCrossExistOrder, logOperation } from '../utils'
+import { parseDateRange, searchCross, searchCrossExistOrder, logOperation, datePreparation } from '../utils'
 
 export const orders = async (_, args, { models: { Order, Address } }) => {
   const data = await Order.findAll({
@@ -51,6 +51,12 @@ export const updateOrder = async (_, args, { models: { Order, CarWorkSchedule },
   const { id } = args
   delete args.id
   args.dateRange = parseDateRange(args.dateRange)
+  args.plannedShippingDate = datePreparation(args.plannedShippingDate)
+  args.plannedDeliveryDate = datePreparation(args.plannedDeliveryDate)
+  args.loadingStart = datePreparation(args.loadingStart)
+  args.loadingEnd = datePreparation(args.loadingEnd)
+  args.unLoadingStart = datePreparation(args.unLoadingStart)
+  args.unLoadingEnd = datePreparation(args.unLoadingEnd)
   if (!!args.carId) {
     if (await searchCrossExistOrder(args.carId, args.dateRange, Order, id)) throw new Error('Пересечение с другими рейсами')
     if (await searchCross(args.carId, args.dateRange, CarWorkSchedule)) throw new Error('Транспортное средство недоступно. Сервис или выходной')
@@ -79,7 +85,6 @@ export const confirmOrder = async (_, { id, carType, carId, dateRange }, { model
   logOperation('order', id, 'confirm', updatedOrder, me.id)
   return updatedOrder
 }
-
 export const ordersForVuex = async (_, { startDate, endDate }, { models: { Order } }) => {
   try {
     const res = await Order.findAll()

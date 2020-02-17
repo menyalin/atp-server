@@ -26,17 +26,23 @@ Order.init({
   dateRange: {
     type: Sequelize.RANGE(Sequelize.DATE)
   },
-  shippingDate: {
-    type: Sequelize.DATEONLY
+  plannedShippingDate: {
+    type: Sequelize.DATE
   },
-  shippingTime: {
-    type: Sequelize.STRING(10)
+  plannedDeliveryDate: {
+    type: Sequelize.DATE
   },
-  deliveryDate: {
-    type: Sequelize.DATEONLY
+  loadingStart: {
+    type: Sequelize.DATE
   },
-  deliveryTime: {
-    type: Sequelize.STRING(10)
+  loadingEnd: {
+    type: Sequelize.DATE
+  },
+  unLoadingStart: {
+    type: Sequelize.DATE
+  },
+  unLoadingEnd: {
+    type: Sequelize.DATE
   },
   isDriverNotified: {
     type: Sequelize.BOOLEAN,
@@ -64,6 +70,18 @@ Order.init({
   },
   trailerId: {
     type: Sequelize.TEXT
+  },
+  plannedCarType: {
+    type: Sequelize.ENUM('20tn', '10tn')
+  },
+  weight: {
+    type: Sequelize.FLOAT
+  },
+  pltCount: {
+    type: Sequelize.INTEGER
+  },
+  price: {
+    type: Sequelize.FLOAT
   }
 }, {
   sequelize,
@@ -107,6 +125,18 @@ OrderTemplate.init({
   lengthCell: {
     type: Sequelize.INTEGER,
     defaultValue: 1
+  },
+  plannedCarType: {
+    type: Sequelize.ENUM('20tn', '10tn')
+  },
+  weight: {
+    type: Sequelize.FLOAT
+  },
+  pltCount: {
+    type: Sequelize.INTEGER
+  },
+  price: {
+    type: Sequelize.FLOAT
   }
 }, {
   sequelize,
