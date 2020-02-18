@@ -85,12 +85,32 @@ export const confirmOrder = async (_, { id, carType, carId, dateRange }, { model
   logOperation('order', id, 'confirm', updatedOrder, me.id)
   return updatedOrder
 }
+export const deleteOrder = async (_, { id }, { models: { Order }, me }, ) => {
+  try {
+    const order = await Order.findByPk(id)
+    order.isActive = false
+    await order.save()
+    pubsub.publish('orderDeleted', { orderDeleted: order })
+    logOperation('order', id, 'delete', order, me.id)
+    return order
+  } catch (e) {
+    throw new Error("Ошибка удаления Order", e.message)
+  }
+}
+
 export const ordersForVuex = async (_, { startDate, endDate }, { models: { Order } }) => {
   try {
-    const res = await Order.findAll()
+    const res = await Order.findAll({
+      where: {
+        isActive: true,
+        dateRange: {
+          [Op.overlap]: parseDateRange(`[${startDate} 00:00,${endDate} 23:59]`)
+        }
+      }
+    })
     return res
   } catch (e) {
-    throw new Error(e.message)
+    throw new Error("Ошибка запроса ordersForVuex", e.message)
   }
 }
 export const orderTemplates = async (_, args, { models: { OrderTemplate } }) => {

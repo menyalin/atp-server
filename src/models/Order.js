@@ -82,6 +82,10 @@ Order.init({
   },
   price: {
     type: Sequelize.FLOAT
+  },
+  isActive: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true
   }
 }, {
   sequelize,

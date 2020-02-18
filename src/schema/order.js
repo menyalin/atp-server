@@ -50,6 +50,7 @@ extend type Query {
 extend type Subscription {
   orderAdded: Order
   orderUpdated: Order
+  orderDeleted: Order
   orderTemplateUpdated: Order
   orderTemplateDeleted: ID
 }
@@ -62,6 +63,7 @@ extend type Mutation {
                   showInMenu: Boolean, lengthCell:Int! plannedCarType: String weight: String pltCount: String price: String): Order
   deleteOrderTemplate(id: ID!): Boolean
   
+  deleteOrder(id: ID!): Order
   createOrder(
     carType: String!, 
     dateRange: String!,
