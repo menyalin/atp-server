@@ -84,7 +84,9 @@ export const updateCarWorkSchedule = async (_, args, { models: { CarWorkSchedule
     throw new Error('Ошибка обновления записи CarWorkSchedule')
   }
 }
-export const carWorkScheduleForVuex = async (_, args, { models: { CarWorkSchedule } }) => {
+export const carWorkScheduleForVuex = async (_, { startDate, endDate }, { models: { CarWorkSchedule } }) => {
+  const dateRange = parseDateRange(`[${startDate},${endDate}]`)
+  console.log(dateRange);
   // todo: Ограничить начальной и конечной датами
   try {
     const res = CarWorkSchedule.findAll()
@@ -115,19 +117,15 @@ export const createCarUnit = async (_, args, { models: { CarUnit }, me }) => {
     throw new Error('Ошибка создания CarUnit')
   }
 }
-export const updateCarUnit = async (_, args, { models: { CarUnit }, me }) => {
+export const updateCarUnit = async (_, { id, startDate, truckId, trailerId, driverId1, driverId2, note }, { models: { CarUnit }, me }) => {
   try {
-    const { id } = args
-    delete args.id
-    args.startDate = datePreparation(args.startDate)
+    startDate = datePreparation(startDate)
     const carUnit = await CarUnit.findByPk(id)
-    console.log(args)
-    await carUnit.update(args)
+    await carUnit.update({ startDate, truckId, trailerId: trailerId || null, driverId2: driverId2 || null, driverId1, note: note || null })
     pubsub.publish('carUnitUpdated', { carUnitUpdated: carUnit })
     logOperation('carUnit', id, 'update', carUnit, me.id)
     return carUnit
   } catch (e) {
-    console.log(e)
     throw new Error('Ошибка обновления CarUnit', e.message)
   }
 }
@@ -139,8 +137,7 @@ export const deleteCarUnit = async (_, { id }, { models: { CarUnit }, me }) => {
     logOperation('carUnit', id, 'delete', carUnit, me.id)
     return id
   } catch (e) {
-    console.log(e)
-    throw new Error('Ошибка обновления CarUnit', e.message)
+    throw new Error('Ошибка удаления CarUnit', e.message)
   }
 }
 
