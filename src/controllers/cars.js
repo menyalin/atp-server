@@ -2,6 +2,7 @@ import { Op } from 'sequelize'
 import { pubsub } from '../pubsub'
 import { CarUnit } from '../models/Car'
 import { parseDateRange, searchCross, searchCrossExistOrder, logOperation, datePreparation } from '../utils'
+import moment from 'moment'
 
 export const getCarUnitFields = async (truckId, date) => {
   const carUnit = await CarUnit.findOne({
@@ -86,10 +87,14 @@ export const updateCarWorkSchedule = async (_, args, { models: { CarWorkSchedule
 }
 export const carWorkScheduleForVuex = async (_, { startDate, endDate }, { models: { CarWorkSchedule } }) => {
   const dateRange = parseDateRange(`[${startDate},${endDate}]`)
-  console.log(dateRange);
-  // todo: Ограничить начальной и конечной датами
   try {
-    const res = CarWorkSchedule.findAll()
+    const res = CarWorkSchedule.findAll({
+      where: {
+        dateRange: {
+          [Op.overlap]: parseDateRange(`[${startDate} 00:00,${endDate} 23:59]`)
+        }
+      }
+    })
     return res
   } catch (e) {
     throw new Error('Ошибка поиска в таблице "CarWorkSchedule"')
