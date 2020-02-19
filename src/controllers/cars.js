@@ -15,7 +15,11 @@ export const getCarUnitFields = async (truckId, date) => {
     },
     order: [['startDate', 'DESC']]
   })
-  let carUnitFields = {}
+  let carUnitFields = {
+    driverId1: null,
+    driverId2: null,
+    trailerId: null
+  }
   if (!!carUnit) {
     carUnitFields.driverId1 = carUnit.driverId1
     carUnitFields.driverId2 = carUnit.driverId2
