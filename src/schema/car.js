@@ -48,6 +48,10 @@ type CarUnit {
   isActive: Boolean
   note: String
 }
+type CarWorkSchedulePage {
+  carWorkSchedule: [CarWorkSchedule]
+  count: Int
+}
 
 type CarUnitPage {
   carUnits: [CarUnit]
@@ -57,6 +61,7 @@ type CarUnitPage {
 extend type Query {
   carsForVuex: [Car]
   carWorkScheduleForVuex (startDate: String, endDate: String): [CarWorkSchedule]
+  carWorkSchedulePage(offset: Int, limit: Int!): CarWorkSchedulePage
 
   carUnit(date:String! truckId: String!): CarUnit
   carUnitsPage(offset: Int, limit: Int): CarUnitPage
@@ -75,7 +80,7 @@ extend type Mutation {
 
   createCarWorkSchedule(carId: String!, type: CarWorkScheduleType!, dateRange: String!, note: String, title: String): CarWorkSchedule
   updateCarWorkSchedule(id: ID!, carId: String!, type: CarWorkScheduleType!, dateRange: String!, note: String, title: String): CarWorkSchedule
-  deleteCarWorkSchedule(id: ID!): Boolean
+  deleteCarWorkSchedule(id: ID!): ID
   
   createCarUnit(startDate: String! truckId: String! trailerId: String driverId1:String! driverId2:String note:String): CarUnit
   updateCarUnit(id: ID! startDate: String! truckId: String! trailerId: String driverId1:String! driverId2:String note:String): CarUnit

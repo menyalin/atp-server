@@ -1,6 +1,6 @@
 import {
   carsForVuex, createCar, updateCar,
-  createCarWorkSchedule, carWorkScheduleForVuex, updateCarWorkSchedule, deleteCarWorkSchedule,
+  createCarWorkSchedule, carWorkScheduleForVuex, carWorkSchedulePage, updateCarWorkSchedule, deleteCarWorkSchedule,
   createCarUnit, updateCarUnit, deleteCarUnit, carUnit, carUnitsPage
 } from '../controllers/cars'
 import { pubsub } from '../pubsub'
@@ -9,6 +9,7 @@ export default {
   Query: {
     carsForVuex,
     carWorkScheduleForVuex,
+    carWorkSchedulePage,
 
     carUnit,
     carUnitsPage

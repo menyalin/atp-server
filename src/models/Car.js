@@ -51,6 +51,11 @@ Car.init({
 
 export class CarWorkSchedule extends Model { }
 CarWorkSchedule.init({
+  id: {
+    type: Sequelize.UUID,
+    primaryKey: true,
+    defaultValue: Sequelize.UUIDV4,
+  },
   type: {
     type: Sequelize.ENUM('service', 'holiday')
   },
@@ -108,5 +113,5 @@ CarUnit.init({
 CarWorkSchedule.belongsTo(Car, { as: 'car', constraints: false })
 
 Car.sync()
-CarWorkSchedule.sync()
+CarWorkSchedule.sync({ force: true })
 CarUnit.sync()

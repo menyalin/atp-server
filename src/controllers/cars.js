@@ -90,7 +90,6 @@ export const updateCarWorkSchedule = async (_, args, { models: { CarWorkSchedule
   }
 }
 export const carWorkScheduleForVuex = async (_, { startDate, endDate }, { models: { CarWorkSchedule } }) => {
-  const dateRange = parseDateRange(`[${startDate},${endDate}]`)
   try {
     const res = CarWorkSchedule.findAll({
       where: {
@@ -110,7 +109,7 @@ export const deleteCarWorkSchedule = async (_, { id }, { models: { CarWorkSchedu
     logOperation('carWorkSchedule', id, 'delete', item, me.id)
     await item.destroy()
     pubsub.publish('deletedCarWorkSchedule', { deletedCarWorkSchedule: id })
-    return true
+    return id
   } catch (e) {
     throw new Error('Ошибка удаления записи')
   }
@@ -172,8 +171,23 @@ export const carUnitsPage = async (_, { limit, offset }, { models: { CarUnit } }
       carUnits: res.rows,
       count: res.count
     }
-
   } catch (e) {
     throw new Error('Ошибка запроса carUnitsPage', e.message)
+  }
+}
+
+export const carWorkSchedulePage = async (_, { limit, offset }, { models: { CarWorkSchedule } }) => {
+  try {
+    const res = await CarWorkSchedule.findAndCountAll({
+      offset,
+      limit,
+      order: [['createdAt', "DESC"]]
+    })
+    return {
+      carWorkSchedule: res.rows,
+      count: res.count
+    }
+  } catch (e) {
+    throw new Error('Ошибка запроса carWorkSchedulePages', e.message)
   }
 }
