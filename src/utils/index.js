@@ -22,11 +22,16 @@ export const datePreparation = (date) => {
 }
 
 export const parseDateRange = (dateRange) => {
-  const regExp = /^\[(2[\d\s-:\+]+),(2[\d\s-:\+]+)[\]|\)]$/
-  if (dateRange.match(regExp).length !== 3) throw new Error('Ошибка формата dateRange')
-  return [
-    { value: new Date(dateRange.match(regExp)[1]), inclusive: true },
-    { value: new Date(dateRange.match(regExp)[2]), inclusive: true }
+  const regExp = /^\[(2[\d\s-:\+]+),([\d\s-:\+]*)\]$/
+  const parsedRange = dateRange.match(regExp)
+  if (parsedRange.length !== 3) throw new Error('Ошибка формата dateRange')
+  else if (parsedRange[2]) return [
+    { value: new Date(parsedRange[1]), inclusive: true },
+    { value: new Date(parsedRange[2]), inclusive: true },
+  ]
+  else return [
+    { value: new Date(parsedRange[1]), inclusive: true },
+    null
   ]
 }
 

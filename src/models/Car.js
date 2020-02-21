@@ -80,13 +80,12 @@ CarUnit.init({
     primaryKey: true,
     defaultValue: Sequelize.UUIDV4,
   },
-  startDate: {
-    type: Sequelize.DATE,
-    unique: 'carUnit'
+  dateRange: {
+    type: Sequelize.RANGE(Sequelize.DATE),
+    allowNull: false
   },
   truckId: {
     type: Sequelize.UUID,
-    unique: 'carUnit'
   },
   trailerId: {
     type: Sequelize.UUID
@@ -107,7 +106,7 @@ CarUnit.init({
   }
 }, {
   sequelize,
-  modelName: 'carUnit'
+  modelName: 'carUnit_forTests'
 })
 
 CarWorkSchedule.belongsTo(Car, { as: 'car', constraints: false })

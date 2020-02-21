@@ -117,9 +117,10 @@ export const deleteCarWorkSchedule = async (_, { id }, { models: { CarWorkSchedu
 
 export const createCarUnit = async (_, args, { models: { CarUnit }, me }) => {
   try {
+    args.dateRange = parseDateRange(args.dateRange)
     const data = await CarUnit.create(args)
-    pubsub.publish('carUnitUpdated', { carUnitUpdated: data })
-    logOperation('carUnit', data.id, 'create', data, me.id)
+    // pubsub.publish('carUnitUpdated', { carUnitUpdated: data })
+    // logOperation('carUnit', data.id, 'create', data, me.id)
     return data
   } catch (e) {
     throw new Error('Ошибка создания CarUnit')
