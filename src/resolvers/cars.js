@@ -11,10 +11,8 @@ export default {
   Query: {
     carsForVuex,
     freeCars,
-
     carWorkScheduleForVuex,
     carWorkSchedulePage,
-
     carUnit,
     carUnitsPage,
     carUnitForVuex
