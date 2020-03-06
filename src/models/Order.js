@@ -2,6 +2,7 @@ import Sequelize, { Model } from 'sequelize'
 import { sequelize } from '../pgDB'
 import { Address } from './Address'
 import { Car } from './Car'
+import { Driver } from './Driver'
 
 export class Order extends Model { }
 Order.init({
@@ -60,12 +61,6 @@ Order.init({
     defaultValue: false
   },
   templateId: {
-    type: Sequelize.TEXT
-  },
-  driverId1: {
-    type: Sequelize.TEXT
-  },
-  driverId2: {
     type: Sequelize.TEXT
   },
   trailerId: {
@@ -150,5 +145,7 @@ OrderTemplate.init({
 Order.belongsTo(Address, { as: 'shipper', constraints: false })
 Order.belongsTo(Address, { as: 'consignee', constraints: false })
 Order.belongsTo(Car, { as: 'car', constraints: false })
+Order.belongsTo(Driver, { as: 'driver1', constraints: false })
+Order.belongsTo(Driver, { as: 'driver2', constraints: false })
 Order.sync()
 OrderTemplate.sync()

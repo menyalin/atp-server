@@ -13,17 +13,16 @@ export const getCarUnitFields = async (truckId, date) => {
         [Op.contains]: date
       },
       truckId: truckId
-    },
-    order: [['dateRange', 'DESC']]
+    }
   })
   let carUnitFields = {
-    driverId1: null,
-    driverId2: null,
+    driver1Id: null,
+    driver2Id: null,
     trailerId: null
   }
   if (!!carUnit) {
-    carUnitFields.driverId1 = carUnit.driverId1
-    carUnitFields.driverId2 = carUnit.driverId2
+    carUnitFields.driver1Id = carUnit.driver1Id
+    carUnitFields.driver2Id = carUnit.driver2Id
     carUnitFields.trailerId = carUnit.trailerId
   }
   return carUnitFields

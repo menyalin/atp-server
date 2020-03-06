@@ -27,8 +27,8 @@ type Order {
   showInMenu: Boolean
   lengthCell: Int
   attention: Boolean
-  driverId1: String
-  driverId2: String
+  driver1Id: String
+  driver2Id: String
   trailerId: String
   plannedCarType: String
   weight: String
@@ -83,8 +83,8 @@ extend type Mutation {
     lengthCell: Int
     templateId: String
     attention: Boolean
-    driverId1: String
-    driverId2: String
+    driver1Id: String
+    driver2Id: String
     trailerId: String
     plannedCarType: String
     weight: String
@@ -111,8 +111,8 @@ extend type Mutation {
     templateId: String
     lengthCell: Int
     attention: Boolean
-    driverId1: String
-    driverId2: String
+    driver1Id: String
+    driver2Id: String
     trailerId: String
     plannedCarType: String
     weight: String
