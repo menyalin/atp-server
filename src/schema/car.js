@@ -33,6 +33,8 @@ type CarWorkSchedule {
   id: ID
   carId: String
   car: Car
+  trailerId: String
+  driverId: String
   type: CarWorkScheduleType
   dateRange: [dateRange]
   title: String
@@ -43,8 +45,8 @@ type CarUnit {
   dateRange: [dateRange]
   truckId: String
   trailerId: String
-  driverId1: String
-  driverId2: String
+  driver1Id: String
+  driver2Id: String
   isActive: Boolean
   note: String
 }
@@ -60,11 +62,14 @@ type CarUnitPage {
 
 extend type Query {
   carsForVuex: [Car]
+  freeCars(dateRange: String!, carUnitId: String): [Car]
+
   carWorkScheduleForVuex (startDate: String, endDate: String): [CarWorkSchedule]
   carWorkSchedulePage(offset: Int, limit: Int!): CarWorkSchedulePage
 
   carUnit(dateRange:String! truckId: String!): CarUnit
   carUnitsPage(offset: Int, limit: Int): CarUnitPage
+  carUnitForVuex(startDate: String, endDate: String): [CarUnit]
 }
 
 extend type Subscription {
@@ -78,12 +83,12 @@ extend type Mutation {
   createCar (title: String!, owner: String, isOwned: Boolean, type: String!, maxPltCount: Int, note: String, reg: String, pts: String, listItem: Int, regNumber: String, isActive:Boolean): Car
   updateCar (id: ID! title: String!, owner: String, isOwned: Boolean, type: String!, maxPltCount: Int, note: String, reg: String, pts: String, listItem: Int, regNumber: String isActive:Boolean): Car
 
-  createCarWorkSchedule(carId: String!, type: CarWorkScheduleType!, dateRange: String!, note: String, title: String): CarWorkSchedule
-  updateCarWorkSchedule(id: ID!, carId: String!, type: CarWorkScheduleType!, dateRange: String!, note: String, title: String): CarWorkSchedule
+  createCarWorkSchedule(carId: String, trailerId: String driverId: String type: CarWorkScheduleType!, dateRange: String!, note: String, title: String): CarWorkSchedule
+  updateCarWorkSchedule(id: ID!, carId: String, trailerId: String driverId: String type: CarWorkScheduleType!, dateRange: String!, note: String, title: String): CarWorkSchedule
   deleteCarWorkSchedule(id: ID!): ID
   
-  createCarUnit(dateRange: String! truckId: String! trailerId: String driverId1:String! driverId2:String note:String): CarUnit
-  updateCarUnit(id: ID! dateRange: String truckId: String! trailerId: String driverId1:String! driverId2:String note:String): CarUnit
+  createCarUnit(dateRange: String! truckId: String! trailerId: String driver1Id:String! driver2Id:String note:String): CarUnit
+  updateCarUnit(id: ID! dateRange: String truckId: String! trailerId: String driver1Id:String! driver2Id:String note:String): CarUnit
   deleteCarUnit(id: ID!): ID!
 }
 `

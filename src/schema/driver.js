@@ -14,6 +14,7 @@ type Driver {
 
 extend type Query {
     driversForVuex: [Driver]
+    freeDrivers(dateRange: String! carUnitId: String): [Driver]
 }
 
 extend type Mutation {

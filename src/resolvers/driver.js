@@ -1,12 +1,13 @@
 import {
   createDriver, updateDriver, deleteDriver,
-  driversForVuex
+  driversForVuex, freeDrivers
 } from '../controllers/driver'
 import { pubsub } from '../pubsub'
 
 export default {
   Query: {
-    driversForVuex
+    driversForVuex,
+    freeDrivers
   },
   Mutation: {
     createDriver,

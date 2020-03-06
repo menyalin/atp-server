@@ -1,5 +1,7 @@
 import Sequelize, { Model } from 'sequelize'
 import { sequelize } from '../pgDB'
+import { Driver } from './Driver.js'
+
 export class Car extends Model { }
 Car.init({
   id: {
@@ -84,19 +86,6 @@ CarUnit.init({
     type: Sequelize.RANGE(Sequelize.DATE),
     allowNull: false
   },
-  truckId: {
-    type: Sequelize.UUID,
-  },
-  trailerId: {
-    type: Sequelize.UUID
-  },
-  driverId1: {
-    type: Sequelize.UUID,
-    allowNull: false
-  },
-  driverId2: {
-    type: Sequelize.UUID
-  },
   isActive: {
     type: Sequelize.BOOLEAN,
     defaultValue: true
@@ -106,11 +95,17 @@ CarUnit.init({
   }
 }, {
   sequelize,
-  modelName: 'carUnit_forTests'
+  modelName: 'carUnit'
 })
 
 CarWorkSchedule.belongsTo(Car, { as: 'car', constraints: false })
+CarWorkSchedule.belongsTo(Car, { as: 'trailer', constraints: false })
+CarWorkSchedule.belongsTo(Driver, { as: 'driver', constraints: false })
+CarUnit.belongsTo(Driver, { as: "driver1", constraints: false })
+CarUnit.belongsTo(Driver, { as: "driver2", constraints: false })
+CarUnit.belongsTo(Car, { as: 'truck', constraints: false })
+CarUnit.belongsTo(Car, { as: 'trailer', constraints: false })
 
 Car.sync()
-CarWorkSchedule.sync({ force: true })
+CarWorkSchedule.sync()
 CarUnit.sync()

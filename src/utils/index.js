@@ -1,6 +1,7 @@
 import { Journal } from '../models/journal'
 import { Op } from 'sequelize'
 import moment from 'moment'
+import { NoFragmentCyclesRule } from 'graphql'
 
 export const logOperation = (documentType, documentId, operationType, document, userId) => {
   Journal.create({
@@ -33,6 +34,14 @@ export const parseDateRange = (dateRange) => {
     { value: new Date(parsedRange[1]), inclusive: true },
     null
   ]
+}
+
+export const UnixDateRangeToStr = (range) => {
+  const dateFormat = 'YYYY-MM-DD HH:mm'
+  if (!!range && Array.isArray(range)) {
+    if (range[1].value) return `[${moment(+range[0].value).format(dateFormat)},${moment(+range[1].value).format(dateFormat)}]`
+    else return `[${moment(+range[0].value).format(dateFormat)},]`
+  } else return range
 }
 
 export const searchCross = async (carId, dateRange, model) => {

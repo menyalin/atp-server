@@ -1,18 +1,23 @@
 import {
-  carsForVuex, createCar, updateCar,
+  carsForVuex, freeCars, createCar, updateCar,
   createCarWorkSchedule, carWorkScheduleForVuex, carWorkSchedulePage, updateCarWorkSchedule, deleteCarWorkSchedule,
-  createCarUnit, updateCarUnit, deleteCarUnit, carUnit, carUnitsPage
+  createCarUnit, updateCarUnit, deleteCarUnit, carUnit
 } from '../controllers/cars'
+import { carUnitForVuex, carUnitsPage } from '../controllers/cars/carUnit'
+
 import { pubsub } from '../pubsub'
 
 export default {
   Query: {
     carsForVuex,
+    freeCars,
+
     carWorkScheduleForVuex,
     carWorkSchedulePage,
 
     carUnit,
-    carUnitsPage
+    carUnitsPage,
+    carUnitForVuex
   },
   Mutation: {
     createCar,
