@@ -2,7 +2,7 @@ import {
   carsForVuex, freeCars, createCar, updateCar,
   createCarWorkSchedule, carWorkScheduleForVuex, carWorkSchedulePage, updateCarWorkSchedule, deleteCarWorkSchedule,
   createCarUnit, updateCarUnit, deleteCarUnit, carUnit
-} from '../controllers/cars'
+} from '../controllers/cars/index.js'
 import { carUnitForVuex, carUnitsPage } from '../controllers/cars/carUnit'
 
 import { pubsub } from '../pubsub'
