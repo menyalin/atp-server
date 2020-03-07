@@ -1,6 +1,6 @@
 import { Op } from 'sequelize'
 import { pubsub } from '../pubsub'
-import { getCarUnitFields } from './cars'
+import { getCarUnitFields } from './cars/index.js'
 import { parseDateRange, searchCross, searchCrossExistOrder, logOperation, datePreparation } from '../utils'
 
 export const orders = async (_, args, { models: { Order, Address } }) => {

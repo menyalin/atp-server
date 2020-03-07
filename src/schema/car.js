@@ -78,6 +78,7 @@ extend type Subscription {
   carUpdated: Car
 
   carUnitUpdated: CarUnit
+  carUnitDeleted: ID!
 }
 extend type Mutation {
   createCar (title: String!, owner: String, isOwned: Boolean, type: String!, maxPltCount: Int, note: String, reg: String, pts: String, listItem: Int, regNumber: String, isActive:Boolean): Car
