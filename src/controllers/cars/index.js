@@ -50,9 +50,9 @@ export const freeCars = async (_, { dateRange, carUnitId }, { models: { Car } })
               c."isActive" = TRUE AND
               c."isTempSlot" = FALSE AND 
               c.id NOT IN (
-                (SELECT cu."truckId" FROM "carUnits" AS cu WHERE cu."dateRange" && :dateRange::tstzrange AND cu."truckId" NOTNULL${ carUnitId ? ' AND cu.id<> :carUnitId' : ''}) 
+                (SELECT cu."truckId" FROM "carUnits" AS cu WHERE cu."isActive" = TRUE AND cu."dateRange" && :dateRange::tstzrange AND cu."truckId" NOTNULL${ carUnitId ? ' AND cu.id<> :carUnitId' : ''}) 
                 UNION
-                (SELECT cu."trailerId" FROM "carUnits" AS cu WHERE cu."dateRange" && :dateRange::tstzrange AND cu."trailerId" NOTNULL${ carUnitId ? ' AND cu.id<> :carUnitId' : ''})
+                (SELECT cu."trailerId" FROM "carUnits" AS cu WHERE cu."isActive" = TRUE AND cu."dateRange" && :dateRange::tstzrange AND cu."trailerId" NOTNULL${ carUnitId ? ' AND cu.id<> :carUnitId' : ''})
                 UNION 
                 (SELECT cws."carId" FROM "carWorkSchedules" AS cws WHERE cws."dateRange" && :dateRange::tstzrange AND cws."carId" NOTNULL)
                 UNION
