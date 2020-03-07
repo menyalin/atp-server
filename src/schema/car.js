@@ -68,7 +68,7 @@ extend type Query {
   carWorkSchedulePage(offset: Int, limit: Int!): CarWorkSchedulePage
 
   carUnit(date:String! truckId: String!): CarUnit
-  carUnitsPage(offset: Int, limit: Int): CarUnitPage
+  carUnitsPage(offset: Int, limit: Int, driver: String, truckId: String, trailerId: String, date: String): CarUnitPage
   carUnitForVuex(startDate: String, endDate: String): [CarUnit]
 }
 

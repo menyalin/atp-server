@@ -165,60 +165,7 @@ export const deleteCarWorkSchedule = async (_, { id }, { models: { CarWorkSchedu
     throw new Error('Ошибка удаления записи')
   }
 }
-export const crossCarUnitExist = async (args) => {
-  try {
-    const res = await CarUnit.findOne({
-      where: {
-        isActive: true,
-        dateRange: {
-          [Op.overlap]: args.dateRange
-        },
-        [Op.or]: [
-          {
-            [Op.and]: [
-              { driver1Id: { [Op.in]: [args.driver1Id, args.driver2Id] } },
-              {
-                id: {
-                  [Op.ne]: args.id
-                }
-              }]
-          },
-          {
-            [Op.and]: [
-              { driver2Id: { [Op.in]: [args.driver1Id, args.driver2Id] } },
-              {
-                id: {
-                  [Op.ne]: args.id
-                }
-              }]
-          },
-          {
-            [Op.and]: [
-              { truckId: args.truckId },
-              {
-                id: {
-                  [Op.ne]: args.id
-                }
-              }]
-          },
-          {
-            [Op.and]: [
-              { trailerId: args.trailerId },
-              {
-                id: {
-                  [Op.ne]: args.id
-                }
-              }]
-          }
-        ]
-      }
-    })
-    return res
-  } catch (e) {
-    throw new Error(`Ошибка в поиске пересечений: ${e}`)
-  }
 
-}
 
 
 export const carUnit = async (_, { date, truckId }, { models: { CarUnit } }) => {

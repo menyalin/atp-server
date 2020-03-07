@@ -1,6 +1,43 @@
 import { Op } from 'sequelize'
 import { parseDateRange, searchCross, searchCrossExistOrder, logOperation, UnixDateRangeToStr } from '../../utils'
 import { pubsub } from '../../pubsub'
+import { CarUnit } from '../../models/Car'
+
+export const crossCarUnitExist = async (args) => {
+    try {
+        const res = await CarUnit.findOne({
+            where: {
+                isActive: true,
+                dateRange: { [Op.overlap]: args.dateRange },
+                [Op.or]: [
+                    {
+                        [Op.and]: [
+                            { driver1Id: { [Op.in]: [args.driver1Id, args.driver2Id] } },
+                            { id: { [Op.ne]: args.id } }]
+                    },
+                    {
+                        [Op.and]: [
+                            { driver2Id: { [Op.in]: [args.driver1Id, args.driver2Id] } },
+                            { id: { [Op.ne]: args.id } }]
+                    },
+                    {
+                        [Op.and]: [
+                            { truckId: args.truckId },
+                            { id: { [Op.ne]: args.id } }]
+                    },
+                    {
+                        [Op.and]: [
+                            { trailerId: args.trailerId },
+                            { id: { [Op.ne]: args.id } }]
+                    }
+                ]
+            }
+        })
+        return res
+    } catch (e) {
+        throw new Error(`Ошибка в поиске пересечений: ${e}`)
+    }
+}
 
 export const carUnitForVuex = async (_, { startDate, endDate }, { models: { CarUnit } }) => {
     try {
@@ -18,13 +55,26 @@ export const carUnitForVuex = async (_, { startDate, endDate }, { models: { CarU
     }
 }
 
-export const carUnitsPage = async (_, { limit, offset }, { models: { CarUnit } }) => {
+export const carUnitsPage = async (_, { limit, offset, driver, trailerId, truckId, date }, { models: { CarUnit } }) => {
     try {
+        let filters = {
+            isActive: true
+        }
+        if (driver) filters = Object.assign(filters, {
+            [Op.or]: [{ driver1Id: driver }, { driver2Id: driver }]
+        })
+        if (truckId) filters.truckId = truckId
+        if (trailerId) filters.trailerId = trailerId
+        if (date) filters = Object.assign(filters, {
+            dateRange: {
+                [Op.contains]: date
+            },
+        })
         const res = await CarUnit.findAndCountAll({
             offset,
             limit,
             where: {
-                isActive: true
+                ...filters,
             },
             order: [['createdAt', "DESC"]]
         })
@@ -33,7 +83,7 @@ export const carUnitsPage = async (_, { limit, offset }, { models: { CarUnit } }
             count: res.count
         }
     } catch (e) {
-        throw new Error('Ошибка запроса carUnitsPage', e.message)
+        throw new Error(`Ошибка запроса carUnitsPage: ${e.message}`)
     }
 }
 
@@ -48,7 +98,7 @@ export const createCarUnit = async (_, args, { models: { CarUnit }, me }) => {
         logOperation('carUnit', data.id, 'create', data, me.id)
         return data
     } catch (e) {
-        throw new Error('Ошибка создания CarUnit', e.message)
+        throw new Error(`Ошибка создания CarUnit: ${e}`)
     }
 }
 
