@@ -37,7 +37,7 @@ export const carsForVuex = async (_, args, { models: { Car } }) => {
     throw new Error('Ошибка поиска в таблице "Cars"')
   }
 }
-export const freeCars = async (_, { dateRange, carUnitId }, { models: { Car } }) => {
+export const freeCars = async (_, { dateRange, carUnitId, truckId, trailerId }, { models: { Car } }) => {
   try {
     if (!dateRange) throw new Error("dateRange отсутствует! ошибка запроса freeCars")
     dateRange = UnixDateRangeToStr(dateRange)
@@ -47,7 +47,9 @@ export const freeCars = async (_, { dateRange, carUnitId }, { models: { Car } })
             FROM
               "cars" AS c 
             WHERE 
-              c."isActive" = TRUE AND
+              (c."isActive" = TRUE  ${truckId ? ' OR c.id=:truckId' : ''}
+                                    ${trailerId ? ' OR c.id = :trailerId' : ''})
+              AND
               c."isTempSlot" = FALSE AND 
               c.id NOT IN (
                 (SELECT cu."truckId" FROM "carUnits" AS cu WHERE cu."isActive" = TRUE AND cu."dateRange" && :dateRange::tstzrange AND cu."truckId" NOTNULL${ carUnitId ? ' AND cu.id<> :carUnitId' : ''}) 
@@ -59,7 +61,7 @@ export const freeCars = async (_, { dateRange, carUnitId }, { models: { Car } })
                 (SELECT cws."trailerId" FROM "carWorkSchedules" AS cws WHERE cws."dateRange" && :dateRange::tstzrange AND cws."trailerId" NOTNULL)
                 )
         `, {
-      replacements: { dateRange, carUnitId },
+      replacements: { dateRange, carUnitId, truckId, trailerId },
       model: Car
     })
     return res

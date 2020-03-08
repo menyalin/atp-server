@@ -47,7 +47,7 @@ export const deleteDriver = async (_, { id }, { models: { Driver }, me }) => {
   }
 }
 
-export const freeDrivers = async (_, { dateRange, carUnitId }, { models: { Driver } }) => {
+export const freeDrivers = async (_, { dateRange, carUnitId, driver1Id, driver2Id }, { models: { Driver } }) => {
   try {
     if (!dateRange) throw new Error("Дата отсутствует! ошибка запроса freeDrivers")
     dateRange = UnixDateRangeToStr(dateRange)
@@ -57,7 +57,9 @@ export const freeDrivers = async (_, { dateRange, carUnitId }, { models: { Drive
             FROM
 	            "drivers" AS d 
             WHERE
-              d."isActive" = TRUE AND
+              (d."isActive" = TRUE  ${driver1Id ? ' OR d.id = :driver1Id' : ''}
+                                    ${driver2Id ? ' OR d.id = :driver2Id' : ''}) 
+              AND
               d.id NOT IN (
                 (SELECT cu."driver1Id" FROM "carUnits" AS cu WHERE cu."isActive" = TRUE AND cu."dateRange" && :dateRange :: tstzrange AND cu."driver1Id" NOTNULL${ carUnitId ? ' AND cu."id"<> :carUnitId' : ''}) 
                 UNION
@@ -66,7 +68,7 @@ export const freeDrivers = async (_, { dateRange, carUnitId }, { models: { Drive
                 (SELECT cws."driverId" FROM "carWorkSchedules" AS cws WHERE cws."dateRange" && :dateRange :: tstzrange AND cws."driverId" NOTNULL) 
                 ) 
         `, {
-      replacements: { dateRange, carUnitId },
+      replacements: { dateRange, carUnitId, driver1Id, driver2Id },
       model: Driver
     })
     return res
