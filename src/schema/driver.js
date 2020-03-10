@@ -19,7 +19,7 @@ extend type Query {
 
 extend type Mutation {
     createDriver (shortName: String, fullName: String, phone1: String, phone2: String, passport: String, driversLicense: String, note: String): Driver
-    updateDriver (id: ID!, shortName: String, fullName: String, phone1: String, phone2: String, passport: String, driversLicense: String, note: String): Driver
+    updateDriver (id: ID!, shortName: String, fullName: String, phone1: String, phone2: String, passport: String, driversLicense: String, note: String isActive:Boolean): Driver
     deleteDriver (id: ID!): Boolean
 }
 
