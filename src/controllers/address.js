@@ -31,11 +31,11 @@ export const addressById = async (_, { id }, { models: { Address } }) => {
 export const filteredAddresses = async (_, { filter, type }, { models: { Address } }) => {
   const searchQuery = {
     isActive: true,
-    [ Op.or ]: [
-      { shortName: { [ Op.iRegexp ]: filter } },
-      { partner: { [ Op.iRegexp ]: filter } },
-      { address: { [ Op.iRegexp ]: filter } },
-      { note: { [ Op.iRegexp ]: filter } }
+    [Op.or]: [
+      { shortName: { [Op.iRegexp]: filter } },
+      { partner: { [Op.iRegexp]: filter } },
+      { address: { [Op.iRegexp]: filter } },
+      { note: { [Op.iRegexp]: filter } }
     ]
   }
   if (type === 'shippingPlace') {
@@ -66,11 +66,11 @@ export const addressPages = async (_, { offset, limit, search, isDeliveryPlace, 
 
   if (search) {
     searchQuery = Object.assign({}, searchQuery, {
-      [ Op.or ]: [
-        { shortName: { [ Op.iRegexp ]: search } },
-        { partner: { [ Op.iRegexp ]: search } },
-        { address: { [ Op.iRegexp ]: search } },
-        { note: { [ Op.iRegexp ]: search } }
+      [Op.or]: [
+        { shortName: { [Op.iRegexp]: search } },
+        { partner: { [Op.iRegexp]: search } },
+        { address: { [Op.iRegexp]: search } },
+        { note: { [Op.iRegexp]: search } }
       ]
     })
   }
@@ -78,7 +78,7 @@ export const addressPages = async (_, { offset, limit, search, isDeliveryPlace, 
     where: searchQuery,
     offset,
     limit,
-    order: [ 'id' ]
+    order: ['id']
   })
   return {
     addresses: res.rows,
@@ -86,9 +86,9 @@ export const addressPages = async (_, { offset, limit, search, isDeliveryPlace, 
   }
 }
 
-export const updateAddress = async (_, { id, address, partner, shortName, note, isShippingPlace, isDeliveryPlace }, { models: { Address } }) => {
+export const updateAddress = async (_, { id, address, partner, shortName, note, isShippingPlace, isDeliveryPlace, isActive }, { models: { Address } }) => {
   const adr = await Address.findByPk(id)
-  await adr.update({ address, partner, shortName, note, isShippingPlace, isDeliveryPlace })
+  await adr.update({ address, partner, shortName, note, isShippingPlace, isDeliveryPlace, isActive })
   pubsub.publish('addressUpdated', { addressUpdated: adr })
   return adr
 }

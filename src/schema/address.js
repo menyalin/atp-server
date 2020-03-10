@@ -31,7 +31,7 @@ extend type Mutation {
                   note: String,
                   isShippingPlace: Boolean,
                   isDeliveryPlace: Boolean ): Address
-  updateAddress (id: ID, 
+  updateAddress (id: ID, isActive: Boolean,
                   partner: String, 
                   address:String, 
                   shortName:String,
