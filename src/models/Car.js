@@ -24,6 +24,9 @@ Car.init({
   owner: {
     type: Sequelize.TEXT
   },
+  regNumber: {
+    type: Sequelize.TEXT
+  },
   reg: {
     type: Sequelize.TEXT
   },
