@@ -184,35 +184,3 @@ export const changeUserStatus = async (_, { userId, isActive }, { models: { User
   await user.save()
   return user
 }
-
-export const changeDispatcherRole = async (_, { userId, isDispatcher }, { models: { User, UserRole } }) => {
-  let role = await UserRole.findOne({
-    where: {
-      userId,
-      role: 'dispatcher'
-    },
-    include: [
-      { model: User, as: 'user' }
-    ]
-  })
-  if (role && isDispatcher) {
-    role.isActive = true
-    role.save()
-  } else if (role && !isDispatcher) {
-    role.isActive = false
-    role.save()
-  } else {
-    const newRole = await UserRole.create({
-      userId,
-      role: 'dispatcher',
-      isActive: true
-    })
-    role = await UserRole.findByPk(newRole.id, {
-      include: [
-        { model: User, as: 'user' }
-      ]
-    })
-  }
-  pubsub.publish('updatedUserRoles', { updatedUserRoles: role })
-  return role
-}

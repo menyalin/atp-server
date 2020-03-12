@@ -1,6 +1,6 @@
 import {
   signupUser, signinUser, getCurrentUser, getAllUsers, isExistEmail, changeUserStatus,
-  createRole, getUserRoles, userRoles, updateSchedule, scheduleForVuex, usersForAdminPanel, changeDispatcherRole, createSchedule, deleteSchedule,
+  createRole, getUserRoles, userRoles, updateSchedule, scheduleForVuex, usersForAdminPanel, createSchedule, deleteSchedule,
   deleteRole
 } from '../controllers/user'
 import { pubsub } from '../pubsub'
@@ -43,6 +43,5 @@ export default {
     deleteSchedule,
 
     changeUserStatus,
-    changeDispatcherRole
   }
 }

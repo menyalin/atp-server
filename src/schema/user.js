@@ -55,8 +55,6 @@ type User {
     createRole(userId: String!, role: String!): userRole
     deleteRole(userId: String! role: String!): Boolean
 
-    changeDispatcherRole(userId: String!, isDispatcher: Boolean!): userRole
-
     signupUser( name: String email: String password: String ): Token!
     signinUser(email: String!, password: String!): Token!
     changeUserStatus(userId: String!, isActive: Boolean!): User
