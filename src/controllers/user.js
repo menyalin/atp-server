@@ -2,6 +2,7 @@ import { AuthenticationError } from 'apollo-server-express'
 import jwt from 'jsonwebtoken'
 import { Op } from 'sequelize'
 import { pubsub } from '../pubsub'
+import { FieldsOnCorrectTypeRule } from 'graphql'
 
 const createToken = async (user) => {
   const token = await jwt.sign({
@@ -54,12 +55,37 @@ export const isExistEmail = async (_, { email }, { models: { User } }) => {
   return !!user
 }
 
-export const createRole = async (_, { userId, role }, { models: { UserRole } }) => {
+export const createRole = async (_, { userId, role }, { models: { UserRole, User } }) => {
   const newRole = await UserRole.create({
     userId,
     role
   })
+  await newRole.reload({
+    include: [
+      { model: User, as: 'user' }
+    ]
+  })
+  pubsub.publish('updatedUserRoles', { updatedUserRoles: newRole })
   return newRole
+}
+
+export const deleteRole = async (_, { userId, role }, { models: { UserRole } }) => {
+  try {
+    const tmpRole = await UserRole.findOne({
+      where: {
+        userId,
+        role
+      }
+    })
+    if (tmpRole) {
+      const id = tmpRole.id
+      await tmpRole.destroy()
+      pubsub.publish('deletedUserRoles', { deletedUserRoles: id })
+      return true
+    } else return false
+  } catch (e) {
+    throw new Error(`Ошибка удаления роли: ${e}`)
+  }
 }
 
 export const getUserRoles = async (user, args, { models: { UserRole } }) => {
@@ -72,13 +98,13 @@ export const getUserRoles = async (user, args, { models: { UserRole } }) => {
   return roles.map(item => item.role)
 }
 
-export const staff = async (_, args, { models: { UserRole, User } }) => {
-  const staff = await UserRole.findAll({
+export const userRoles = async (_, args, { models: { UserRole, User } }) => {
+  const res = await UserRole.findAll({
     include: [
       { model: User, as: 'user' }
     ]
   })
-  return staff
+  return res
 }
 
 export const scheduleForVuex = async (_, { startDate, endDate }, { models: { Schedule, User, Car } }) => {
@@ -92,7 +118,6 @@ export const scheduleForVuex = async (_, { startDate, endDate }, { models: { Sch
       },
       include: [
         { model: User, as: 'user' },
-        { model: Car, as: 'car' }
       ]
     })
     return res
@@ -101,23 +126,49 @@ export const scheduleForVuex = async (_, { startDate, endDate }, { models: { Sch
   }
 }
 
-export const updateSchedule = async (_, { scheduleId, date, userId }, { models: { Schedule, User } }) => {
-  if (scheduleId) {
-    const schedule = await Schedule.findByPk(scheduleId)
-    schedule.userId = userId
-    await schedule.save()
-    const res = await Schedule.findByPk(schedule.id, { include: [{ model: User, as: 'user' }] })
+export const createSchedule = async (_, args, { models: { Schedule, User } }) => {
+  try {
+    const res = await Schedule.create(args)
+    await res.reload({ include: [{ model: User, as: 'user' }] })
     pubsub.publish('scheduleUpdated', { scheduleUpdated: res })
     return res
-  } else {
-    const newSchedule = await Schedule.create({
-      type: 'dispatcher',
-      date: date,
-      userId: userId
-    })
-    const res = await Schedule.findByPk(newSchedule.id, { include: [{ model: User, as: 'user' }] })
-    pubsub.publish('scheduleUpdated', { scheduleUpdated: res })
-    return res
+  } catch (e) {
+    throw new Error(`Ошибка создания Schedule: ${e}`)
+  }
+}
+
+export const deleteSchedule = async (_, { id }, { models: { Schedule } }) => {
+  try {
+    const res = await Schedule.findByPk(id)
+    if (res) {
+      await res.destroy()
+      pubsub.publish('deletedSchedule', { deletedSchedule: id })
+      return true
+    } else return false
+  } catch (e) {
+    throw new Error(`Ошибка удаления Schedule: ${e}`)
+  }
+}
+
+export const updateSchedule = async (_, { id, date, userId, type }, { models: { Schedule, User } }) => {
+  try {
+    const res = await Schedule.findByPk(id)
+    if (res) {
+      await res.update({
+        date,
+        userId,
+        type
+      })
+      await res.reload({
+        include: [
+          { model: User, as: 'user' }
+        ]
+      })
+      pubsub.publish('scheduleUpdated', { scheduleUpdated: res })
+      return res
+    } else throw new Error('Запись не найдена, обновление не возможно!')
+  } catch (e) {
+    throw new Error(`Ошибка обновления записи schedule: ${e}`)
   }
 }
 
@@ -127,9 +178,7 @@ export const usersForAdminPanel = async (_, args, { models: { User } }) => {
 }
 
 export const changeUserStatus = async (_, { userId, isActive }, { models: { User }, me }) => {
-  if (userId === me.id) {
-    throw new Error('Попытка закрытия доступа самому себе!')
-  }
+  if (userId === me.id) throw new Error('Попытка закрытия доступа самому себе!')
   const user = await User.findByPk(userId)
   user.isActive = isActive
   await user.save()
@@ -164,6 +213,6 @@ export const changeDispatcherRole = async (_, { userId, isDispatcher }, { models
       ]
     })
   }
-  pubsub.publish('staffUpdated', { staffUpdated: role })
+  pubsub.publish('updatedUserRoles', { updatedUserRoles: role })
   return role
 }

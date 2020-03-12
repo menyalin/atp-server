@@ -31,7 +31,7 @@ type User {
     name: String!
     password: String!
     isActive: Boolean
-    roles: [String]
+    roles: [userRoleNames]
  }
   type Token {
     token: String!
@@ -42,23 +42,28 @@ type User {
     getAllUsers: [User]
     isExistEmail (email: String!): Boolean
     usersForAdminPanel: [User]
-    staff: [userRole]
+    userRoles: [userRole]
     scheduleForVuex(startDate: String, endDate: String): [Schedule]
   }
   extend type Subscription {
     scheduleUpdated: Schedule
-    staffUpdated: userRole
+    deletedSchedule: ID
+    updatedUserRoles: userRole
+    deletedUserRoles: String
   }
   type Mutation {
-    createRole(userId: String, role: String): userRole
-    signupUser(
-      name: String
-      email: String
-      password: String
-    ): Token!
+    createRole(userId: String!, role: String!): userRole
+    deleteRole(userId: String! role: String!): Boolean
+
+    changeDispatcherRole(userId: String!, isDispatcher: Boolean!): userRole
+
+    signupUser( name: String email: String password: String ): Token!
     signinUser(email: String!, password: String!): Token!
     changeUserStatus(userId: String!, isActive: Boolean!): User
-    changeDispatcherRole(userId: String!, isDispatcher: Boolean!): userRole
-    updateSchedule(date: String!, userId: String, scheduleId: String): Schedule
+
+    createSchedule(date: String!, userId: String!, type: String!): Schedule
+
+    updateSchedule(id: ID! date: String!, userId: String!, type: String!): Schedule
+    deleteSchedule(id: ID!): Boolean
   }
 `
