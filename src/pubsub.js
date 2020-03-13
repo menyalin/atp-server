@@ -9,4 +9,4 @@ const options = {
 };
 if (process.env.ENV_TYPE === 'dev') {
     pubsub = new PubSub()
-} else pubsub = new RedisPubSub(options);
+} else pubsub = new RedisPubSub();
