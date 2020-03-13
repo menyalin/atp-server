@@ -1,6 +1,6 @@
 import { PubSub } from 'apollo-server-express'
 import { RedisPubSub } from 'graphql-redis-subscriptions';
-export let pubsub
+let pubsub
 const options = {
     retryStrategy: times => {
         // reconnect after
@@ -10,3 +10,5 @@ const options = {
 if (process.env.ENV_TYPE === 'dev') {
     pubsub = new PubSub()
 } else pubsub = new RedisPubSub();
+
+export { pubsub }
