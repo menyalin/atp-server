@@ -26,20 +26,20 @@ server.applyMiddleware({ app, path: '/graphql' })
 const httpServer = http.createServer(app)
 server.installSubscriptionHandlers(httpServer)
 
-// if (cluster.isMaster) {
-//   for (let i = 0;i < numCpu;i++) {
-//     cluster.fork()
-//   }
-//   cluster.on('exit', (worker, code, signal) => {
-//     // eslint-disable-next-line no-console
-//     console.log(`Worker ${worker.process.pid} died`)
-//   })
-// } else {
-  
-// }
+if (cluster.isMaster) {
+  for (let i = 0;i < numCpu;i++) {
+    cluster.fork()
+  }
+  cluster.on('exit', (worker, code, signal) => {
+    // eslint-disable-next-line no-console
+    console.log(`Worker ${worker.process.pid} died`)
+  })
+} else {
+  httpServer.listen({ port }, () => {
+    // eslint-disable-next-line no-console
+    console.log(`Apollo Server on http://localhost:${port}/graphql`)
+  })
+}
 
-httpServer.listen({ port }, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Apollo Server on http://localhost:${port}/graphql`)
-})
+
 

@@ -81,6 +81,7 @@ export const confirmOrder = async (_, { id, carType, carId, dateRange }, { model
     dateRange,
     ...carUnitFields
   })
+  await updatedOrder.reload()
   pubsub.publish('orderUpdated', { orderUpdated: updatedOrder })
   logOperation('order', id, 'confirm', updatedOrder, me.id)
   return updatedOrder

@@ -1,5 +1,13 @@
-import { PubSub } from 'apollo-server-express'
-import { RedisPubSub } from 'graphql-redis-subscriptions';
-let pubsub = new PubSub()
+import { RedisPubSub } from 'graphql-redis-subscriptions'
 
-export { pubsub }
+const options = {
+    host: process.env.REDIS_HOST || '127.0.0.1',
+    port: process.env.REDIS_PORT || 6379,
+}
+
+export const pubsub = new RedisPubSub({
+    connection: options
+})
+
+
+
