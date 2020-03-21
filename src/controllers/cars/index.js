@@ -60,7 +60,7 @@ export const freeCars = async (_, { dateRange, carUnitId, truckId, trailerId }, 
                 UNION
                 (SELECT cws."trailerId" FROM "carWorkSchedules" AS cws WHERE cws."dateRange" && :dateRange::tstzrange AND cws."trailerId" NOTNULL)
                 )
-                ORDER BY listItem
+                ORDER BY "listItem"
         `, {
       replacements: { dateRange, carUnitId, truckId, trailerId },
       model: Car
