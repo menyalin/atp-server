@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "apollo-server": "^2.11.0",
-    "apollo-server-express": "^2.11.0",
+    "apollo-server-express": "^2.14.2",
     "bcryptjs": "^2.4.3",
     "browserslist": "^4.9.1",
     "caniuse-lite": "^1.0.30001032",
