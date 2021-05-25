@@ -33,7 +33,7 @@
     "apollo-server": "^2.11.0",
     "apollo-server-express": "^2.11.0",
     "bcryptjs": "^2.4.3",
-    "browserslist": "^4.9.1",
+    "browserslist": "^4.16.5",
     "caniuse-lite": "^1.0.30001032",
     "cors": "^2.8.5",
     "cross-env": "^6.0.3",
